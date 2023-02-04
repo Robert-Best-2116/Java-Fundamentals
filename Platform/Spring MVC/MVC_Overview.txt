@@ -1,0 +1,41 @@
+
+
+
+MVC Design Pattern 
+
+    MVC stands for model view and controller, its not a framework or language-specific archetecture, rather it is a design pattern for organizing code in a more modularized fassion, that makes development smoother more maintable and extensible, this is especially important for large teams and applications 
+
+
+    The Controller
+
+        All three parts of MVC are modularized code that lives on the server. The controller handeles the initial request and i nteracts with the view and model to proccess data before it sends the final response back to the client. 
+
+        Mapping URLS to Functions
+
+            Before the Controller talks to either the model or the view, it needs to find the right function to call based on the URL alone, and to do that we must map in other words, connect to each url to a function it will call, so in this example, when a user clicks on the today link it goes to that spefici urls route in the controller and calls the getToday function 
+
+
+    The Model 
+
+        The model alone is responsible for fetching dat aand writing data to the database, models generally speaking are classes that represient the rows in a database that is they model data if any data is request the model will return the request data to the controller and form there the controler will pass data to the view engine. 
+
+
+    The View 
+
+        The view prepares the presentaiton for the lcient, dynamically adding any data needed before the responce gets sent as HTML or another clent-ready format and sends this prepared view back to the controller to send in an HTTP response to the client 
+
+
+
+
+MVC Layers in Spring 
+
+    We have used the word Model in a few difrent contexts so far in this course, Model in the MVC design pattern for web applicatoins, Model objet wich is avaialbe in spring MVCS controllers, and Domain Model a java bean that contains annotations to represent the appliacations data 
+
+    Both in spring MVC and in the current definition of the MVC design pattern the model is responseible for managing the applacations buissness logic and data, However in spring MVC the buissness logic is handeled by the Service Layer, and the data is handeled by the Persistence Layer, the SL and the PL together make up for what is known as the M in MVC in todays web applications 
+
+
+        Persistence layer, this layer is in charge of mangaing the appliaations Data, PL is made up of Domain Models and repoitores we will use repoitores to access our database via an object relational mapper, 
+
+        Servie Layer it is made up of classes that implement the buissnes logic of our application, it will call on the repositires to execture some sort of transacation acording to the request from the user 
+
+        

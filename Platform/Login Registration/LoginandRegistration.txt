@@ -1,0 +1,94 @@
+
+
+Overview
+
+    Taking Stock 
+
+        So far weve covered a great deal about spring web dev, and have built several small full-stack java applications Weve learend how to connect to a database, insert records posted from a form, retrieve records from a database, store values in session and implement basic database relationships.
+
+    Login and Registration 
+
+        Well be usuing all of our cumulative skills to build our login and registraton and add intergrate users into our applicatons. one of the major componets to every website is user authentication as well as user valadation on creation, we will be handeling both a little differently in each case 
+
+        In this section well intorudce transiet member variables, ones not stored in the database, within your entity models and similary, usuing a non-entity class, also not stored in the database for user login, we will also review higher level seurity concepts such as password hashing vs encription. 
+
+    One to many relationships with users 
+
+        Whenever you log into a website, you have an account with associated data somewhere in a database, if its a social media site there are all sorts of functional dat and assets tied to your account that may include photos, posts, relationships with friends, groups your part of and more, In this section well not only be implementing user validation and authenticatoin, but also database relationships between users and other data, 
+
+    More complex relationships 
+
+        well also practice implementing mutliple one to many relationships from a wirefram and finally many to many relationships 
+
+    Full Projects
+    
+         in preperation for the exam, here we are 
+
+    
+    Project Setup 
+
+        Add the following dependencies 
+
+            spring-boot-starter-jpa
+            spring-boot-starter-web
+            devtools (optional)
+            mysql-connector-java (runtime)
+            tomcat-embed-jasper
+            jstl
+            NEW: jbcrypt
+            NEW: spring-boot-starter-validation
+
+
+        <       dependency>
+                    <groupId>org.apache.tomcat.embed</groupId>
+                    <artifactId>tomcat-embed-jasper</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>org.mindrot</groupId>
+                    <artifactId>jbcrypt</artifactId>
+                    <version>0.4</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-validation</artifactId>
+                </dependency>
+
+
+    User and LoginUser 
+
+        User, the first model User.java will be uesd to create new uesrs in the database. this happens when a user registers for a new account. there are two fields on the form that should not be saved to the user in the database, the first is the password, generally you should never store a users actuall password anywhere for security reasons, we will be going over waht to store instead a hashed password in the next module, we also dont want to store the confirm password for the same reason. 
+
+    
+    Transient Password Confirmation 
+
+        Password confirmation fields on registration forms are used to ensure that a user dideent have any typos in their password. so we want to compare the password and the confirmatoin but we dont want to store it anywhere, to do this we will include a @Transient annotatoin for confirm, this will allow us to use confirm on an instance ofa user temporarly, without ever saving it to the database, when a user object is saved, with a JPA method, any transiet member variables ar ediscard, and only non-transiet variables are saved to the database. 
+
+    
+    Validation & Authentication 
+
+        If your loggin into your accouint on a site, the server for that site should not need to update create or change anything in the database, all it needs to do is check that you are who yo usay you are. this is called Authentication You will do most of your Authentication logic usuing conditional statments in the service. however as for validation of the format of the input, blank entires etc, we can leverage oop and model annotations to mor eeasily send error messages to th end user 
+
+    LoginUser 
+
+        The model Login user.Java will be uesd for validating input from the login form. Just like the transiet password field. we will never save login user object instances to the database, rather we will use this new class as an input validator usuing the form helper tags, which weve been usuing for model-level valiadations 
+
+        Note that this model does not have the @Entity annotation and only has email and password as those are the fields a user must fill in to log into our app. Although we still will utitalize valadation constraints, its a bit more like a normal OOP Java class. it is not an enitiy in our database and we only use it to temporarirly to valiadate the form input when the user logis in. after form input passes or dosent pass valiadations and authentacation that login user instance dissapears. 
+
+
+
+    Controller
+
+        Now that we have the user and login user models we can perofrm model-level validations, usuing the form:form tags in the jsp as well as the data binding logic we are accustomed too wrighting in our controller methods. later we will be creating the new user in the user service, rather than in the controller. for registaration as well as adding more logic for both login and registration, 
+
+        Service logic will ome later, but as we move forward, take some time to build the login and reg form. as well as understand the controller. 
+
+
+    Password Security 
+
+        Bcrypt and Spring Security 
+
+            User authentication is a crucual feature of most web apps, in this unit we will be showing two ways to authenticate users. tradtional auth and spring secrurity 
+
+            Most web applicatoins use a hashing mechanism such as BCrpyt and session mannagment to authenticae users. this is how web frameworks such as Django and ruby on rais authenticate users. and thats what we refer to as tradtional authetncation. on the other hand. spring security is the defacto standard for securing spring based applications. it brings many benefits such as support for various auth technizues and support for authentication and authorazaiton, cross site requests forgery prevetntion, and so much more. 
+
+            Although the benefits of spring security are great, there are drawbacks, its overly complex, config heavy and the learning curve is steep. so we will learn bcrpyt and have spring security as an option later, 

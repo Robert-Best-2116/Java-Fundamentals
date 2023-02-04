@@ -1,0 +1,225 @@
+
+
+
+Adding Views!!
+
+    APIs vs Full-Stack
+
+        So far, we have impleented a fully functioning back-end appliacation with CURD implementations. We are able to send requests to create, read, update and delete records, usuing soley the url endpoints, in essense, weve built an application programming interface, 
+
+        If you are working on an application with client-side architecture, written in a diffrent framework for example, react or angular, this is all you would need to do to build for the backend, however, going forward we will be intergrating server side-renderin of JSP's to make a full stack application usuing springMVC alone, which means we can set aside the api controller we just built. 
+
+    @Controller vs @RestController
+
+        At this point, youve built controllers usuing both the @Controller and @restController annotations. think for a moment about how you used them. what is the diffrence? if your not sure, think about whats sent back in the HTTP responce, 
+
+        If yo usaid the @RestController annotation means responding with raw data, strings or JSON your correct, so to build a full-stack appliacation, we need to render .jsp files and ultimatley send HTML and not just raw data to the client, which means well be usuing the @Controller annotations going forward for all of our controllers, and we wont be usuing the @RestController or postman further, Requests will now come from user interactions 
+
+
+Adding A Create Form 
+
+    Data-Flow Overview 
+
+        Well now allow our users toenter informatoin on our site through a form, youve already practiced sending form data in other assignments, Your new method for processing the form could look alot like the route to createa book in your old API controller, 
+
+            @PostMapping("/books")
+            public String create(
+                @RequestParam("title") String title,
+                @RequestParam("description") String description,
+                @RequestParam("language") String language,
+                @RequestParam("pages") Integer pages) 
+            {
+                // CODE TO MAKE A NEW BOOK AND SAVE TO THE DB
+                Book book = new Book(title, description, language, pages);
+                bookService.createBook(book);
+                return "redirect:/dashboard";
+            }
+
+        The only diffrence here compared to the API method is that we redirect to the /books route to show that the newly added book was added to the book list, well also need to show the new page, and to createa seperate route for when the uesr goes to books/new well want to show them the create book form. 
+
+
+Data Binding!!
+
+    Adding Data Binding to the Controller 
+
+        Spring MVC has a process called data binding that allows for automatically writing the form data into a new object that we bind to the jsp page, usuing the view model, that is, the Model model that were accustomed too 
+
+    @ModelAttribute, 
+
+        In the controller, well use the @ModelAttribute annotation to handle our book creation and later updating it as well, The steps well be usuing to bind a book object to the view model 
+
+            1. use the @ModelAttribute annotatio to add an empty book object to the view model in the Get route that renders the form, 
+            2. Render the view (new.jsp)
+            3. Fill the object with the form data.
+            4. Pass the filled book from the view model into the POST method 
+            5. Add the @Valid and @ModelAttribute to the post method followed by BindingResult result
+            6. Save the new book to the database 
+
+        Usuing the @ModelAttribute annotation were usuing springs view model, the Model model to handel the object across requests. This is an example of a broaderer design patern, inversion of controll that generally alows for more flexibility, or loose coupling of various componets in an application. 
+
+    Error Handling
+
+        To Add Error Handling well use our model-level validations to send message to the user if they leave a field blank or enter a bad value we need to pass in a new argument, a binding result that well call result, BindingResult result, it is important to note that it must imediatley follow the @ModelAttribute paramater and we must include the @Valid annotation in the begining of the arguments section. 
+
+            Ex Code 
+
+                @Controller
+                public class BooksController {
+                    // other methods removed for brevity
+                    
+                    @GetMapping("/books/new")
+                    public String newBook(@ModelAttribute("book") Book book) {
+                        return "/books/new.jsp";
+                    }
+                    @PostMapping("/books")
+                    public String create(@Valid @ModelAttribute("book") Book book, BindingResult result) {
+                        if (result.hasErrors()) {
+                            return "/books/new.jsp";
+                        } else {
+                            bookService.createBook(book);
+                            return "redirect:/books";
+                        }
+                    }
+
+    Setting Up the Form 
+
+        To bind the book attribute to the firm we first need to include our "book" modelAttribute in the opening form tag, well be importting a new type of our tag into our JSP file as well the form:form and form:input type, well also use form:error, inorder to use any of this we will also need the following tags 
+
+            <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+            <%@ page isErrorPage="true" %>  
+
+                Example code 
+
+                    <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+                    <%@ page isErrorPage="true" %>    
+                    <h1>New Book</h1>
+                    <form:form action="/books" method="post" modelAttribute="book">
+                        <p>
+                            <form:label path="title">Title</form:label>
+                            <form:errors path="title"/>
+                            <form:input path="title"/>
+                        </p>
+                        <p>
+                            <form:label path="description">Description</form:label>
+                            <form:errors path="description"/>
+                            <form:textarea path="description"/>
+                        </p>
+                        <p>
+                            <form:label path="language">Language</form:label>
+                            <form:errors path="language"/>
+                            <form:input path="language"/>
+                        </p>
+                        <p>
+                            <form:label path="numberOfPages">Pages</form:label>
+                            <form:errors path="numberOfPages"/>     
+                            <form:input type="number" path="numberOfPages"/>
+                        </p>    
+                        <input type="submit" value="Submit"/>
+                    </form:form>    
+
+
+    Custom Errors!
+
+        Inorder to show a custom error message, we must include our preffered mesages in the model by addin them to the arugments in the corresponding valadation. 
+
+            Code Example 
+
+                @NotNull
+                @Size(min = 3, max = 40, message="must be between 3-40 characters D:!")
+                private String language;
+                @NotNull(message="Must be 100 pages D:!")
+                @Min(100)
+                private Integer numberOfPages;
+
+        Note in the size for the string, it has the message, and in the integer in the not null it has the message, not sure why. 
+
+
+Update!! 
+
+    Similar to new and create we are going to implent the edit and update feature!!! 
+
+    Edit Book!
+
+        when the user visits the books/id/edit page we want them to see the page to be able to edit that book 
+
+            Ex Code 
+                
+                @RequestMapping("/books/{id}/edit")
+                public String edit(@PathVariable("id") Long id, Model model) {
+                    Book book = bookService.findBook(id);
+                    model.addAttribute("book", book);
+                    return "/books/edit.jsp";
+                }
+                
+                @RequestMapping(value="/books/{id}", method=RequestMethod.PUT)
+                public String update(@Valid @ModelAttribute("book") Book book, BindingResult result) {
+                    if (result.hasErrors()) {
+                        return "/books/edit.jsp";
+                    } else {
+                        bookService.updateBook(book);
+                        return "redirect:/books";
+                    }
+                }
+
+        Be sure to use the id in the route, usuing a diffrent path variable will create a new instance of a book D:! Our update method will render the books/edit jsp file if there are any errors, and itll send you back to the home page ifff everything goes correctly. we should never render on a post but redirecting is cool, when theres valadations though on a post request the information wont be submited very useful, Another reason to render on a post erquest with valadations is that we dont lose the information that the user has filled in on the form. If we were to redirect we would loes all the information in the form and the user will have to type everything again D:! 
+
+            Ex Code 
+
+                <!-- additional tags to add -->
+                <%@ page isErrorPage="true" %>    
+                <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>     
+                <h1>Edit Book</h1>
+                <form:form action="/books/${book.id}" method="post" modelAttribute="book">
+                    <input type="hidden" name="_method" value="put">
+                    <p>
+                        <form:label path="title">Title</form:label>
+                        <form:errors path="title"/>
+                        <form:input path="title"/>
+                    </p>
+                    <p>
+                        <form:label path="description">Description</form:label>
+                        <form:errors path="description"/>
+                        <form:textarea path="description"/>
+                    </p>
+                    <p>
+                        <form:label path="language">Language</form:label>
+                        <form:errors path="language"/>
+                        <form:input path="language"/>
+                    </p>
+                    <p>
+                        <form:label path="numberOfPages">Pages</form:label>
+                        <form:errors path="numberOfPages"/>     
+                        <form:input type="number" path="numberOfPages"/>
+                    </p>    
+                    <input type="submit" value="Submit"/>
+                </form:form>
+
+        Note we have added the <%@ page isErrorPage="true" %> so that we can render the view on a put request, anddd we need to add this to our applacation.properties file!! 
+
+
+    Delete!! 
+
+    Inorder to make a delete button, well use a hidden input inorder to map to a delete route, just as we did with the put route for put route for updating, heres an example of the code 
+
+        <form action="/books/${book.id}" method="post">
+            <input type="hidden" name="_method" value="delete">
+            <input type="submit" value="Delete">
+        </form>
+
+    All we have to do is implement the DESTROY action in our controller 
+
+        @RequestMapping(value="/books/{id}", method=RequestMethod.DELETE)
+        public String destroy(@PathVariable("id") Long id) {
+            bookService.deleteBook(id);
+            return "redirect:/books";
+        }
+
+    Note this function did not work properly, not sure why, possibly because of request mapping, the DeleteMapping worked just fine. said there was no route for the request mapping. 
+
+    or 
+
+        @DeleteMapping("/books/{id}")
+        public String destroy(@PathVariable("id") Long id) {
+            bookService.deleteBook(id);
+            return "redirect:/books";
+        }

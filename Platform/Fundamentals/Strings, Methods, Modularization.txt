@@ -1,0 +1,142 @@
+Strings
+
+    Methods Of the String Class
+
+        Length-Strings have a method to determine their length, but it will need to be used with an int to get the number
+
+            int length = stringName.length();
+            System.out.println(length);
+
+        Concatenate: a string method that allows two strings to be squashed together, you can also use the + its easer, you will need to create a third string variable inorder to concat the two previous ones together
+
+            String string1 = "one";
+            String string2 = "two";
+            String string3 = string1.concat(string2);
+            System.out.println(string3);
+
+        Format: Another way to concatenate strings
+
+            String example = String.format("Hi %s, you owe me $%.2f bucks!, "Jack", 25.0 );
+
+        IndexOf: the IndexOf method searches left to right inside the given string for a "target" string, the index of method returns the index number where the target string is first found or -1 if the target is not found
+
+            String ninja = "Welcome to Coding Dojo!";
+            int a = ninja.indexOf("Coding"); // a is 11
+            int b = ninja.indexOf("co"); // b is 3
+            int c = ninja.indexOf("pizza"); // c is -1, "pizza" is not found
+
+        Uppercase and Lowercase: this string automaticly changes the string to lower or Uppercase
+
+            System.out.println(stringName.toLowerCase());
+            System.out.println(stringName.toUpperCase());
+
+        Equality: we compare the equality ofa string in two ways, do they refer to the exact same object, or do they have the exact sequence of characters 
+
+            // Normal string assignment
+            String a = "same string";
+            String b = "same string";
+            System.out.println(a == b); // true
+            // Creating new strings as separate objects (another way to create a String)
+            a = new String("same letters");
+            b = new String("same letters");
+            System.out.println(a == b); // false. Not the same object in memory.
+            System.out.println(a.equals(b)); // true. same exact characters.
+
+        
+    When to use == and when to use .equals()
+
+        Usuing == with objects is for comparing to see if both variables point to the same address and the same object in memory, much of the time thats what we want, this will work fine for the assingments in this chapter to compare our basic built-in types, however as we work with more object types we will need to use .equals() instead of == to acomplish the desired comparasion 
+
+            Examples
+
+                String a = new String( "Dojo" );
+                System.out.println( a == "Dojo" );
+
+                this will print out `false`
+
+                String a = new String( "Dojo" );
+                System.out.println( a.equals("Dojo") );
+
+                this will print out `true`
+
+
+
+Methods 
+
+    Methods VS Functions
+
+        A method is what we call a function in Java and in Object Orented Programing generally. Specifically its a function that belongs to a class. Due to the object orentated nature of java, I will only be dealing with methods, and never stand alone functions. in java the term function may be used but it is always refering toa method.
+
+    Java Method Declaration
+
+        Creating Methods in Java is diffrent from python or javascript. first it will need to have the word public or private in front of it, it will determine if the method can be accessed only from inside of the page or from anywhere. then it will need to have the data type that it is retuning, string, int etc, or void if it is not returning a data type, then the function name followed by () and the paramaters included inside of it. 
+
+
+    Method Signatures 
+
+        Every method has what is called a signature, consider the following method declaration: 
+
+            public String guestGreeting(String name, String dayPeriod) 
+
+        This method has a signiture of guestGreeting(String, String) the signiture is comprised of two things
+
+            1. the name of the method.
+            2. the paramater types
+        
+        Every single method has thease two signiture componets which allows us to do what is called overloading methods
+
+
+    Method Overloading
+
+        Method Overloading is when we name two methods the same thing even though they may behave completely diffrently, for example we can have the two following methods in the same class.
+
+                public String guestGreeting(String name) {
+
+                public String guestGreeting(String name, String dayPeriod) {
+
+
+        Now which code is invoked when we call the guestGreeting method will depend on the argument type and the method signature, do the javas type system if we try to call guestGreeting with a string and another string, it will know that we are trying to invoke the second greeting due to its signiture of 
+        guestGreeting(String, String). This allows us to handle diffrent cases of method invocation based upon inputs. 
+        
+
+
+Modularization
+
+    The Main Method
+
+        Going forward we will only have one file that has this main method that we are usuing. the only files that contain this main method can be run directley and executed. However other files can be imported or injected into this file and will ocmplie if they are refrenced inside the main method
+
+
+        Typically this file is the launch point for an application and usually has very little code, for now though we are going to be usuing it to test our code from otehr files. there are two ways to run code from other files, importing and dependency injection
+
+
+    Importing
+
+        Java has many built in clases and methods that are readily available to developers. To tell java to use a special class for our program all we have to do is use an import statment before our class definition. if we were to use the java utilitys library date function then we would need to import it before our class and it would look something like this
+
+            import java.util.Date;
+
+
+    Dependency Injection 
+
+        Going forward we will hear the term depencecy injection quite a bit. Dependency Injection is another way to use external code form another file. to do this we create a variable that has access to all of that classes methods. This is called an object instance. object instaces are used for other things but this is one way to use methods contained in other files
+
+            Create a variable of the type of class you are injecting, 
+
+                Greetings greeterApp = new Greetings();
+
+            Use . notation to access it. 
+
+                String dateMessage = greeterApp.getCurrentDate();
+                System.out.println(dateMessage);
+
+            Java programs are heavily dependent on importing code that already has been created. it is uncomon to have java programs that are completely stand alone with out any imports. although reusuing given lasses and methods is common you should check documetation for best practices
+
+
+    Test File
+
+        From this point on we will be creating a test file that runs our java classes. our test file contains the main entry method and tests our injected classes for functionality. we want to seperaate class information from test/running information, this alows ut o modularize our code and ruse the same code accrost multiple programs. 
+
+        As long as the tested code and the testing file are in the same directory ( read folder) you do not have to implictly import one into another. you just run the javac on the test/main code section and it will compile all relavant files.
+
+        

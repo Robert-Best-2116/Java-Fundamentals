@@ -1,0 +1,28 @@
+
+So we need to create the java file, done
+then we need to create a public class for the cafeutil. 
+
+
+for the first section we are going to need a for loop that iterates through ten, and returns 55, what i belive needs to be done is changing what the sum is by adding sum + i in every for loop. and returning the sum after exiting the loop print said sum. 
+
+for the second item we are going to need to loop through an array for the length of the array, and sum all of the numbers together and return the total, i think this will have similar logic to the previous one where the value of the array will need to be added to the new sum and the sum will then equal the new total. and then return said sum. and print it. 
+
+for number three, we will need to loop through the length of the array list. and print out each index in the array. 
+
+for number four we will need too print the given information to the console, then place the given code into it so we can create a new variable to be passed into the code, then we will need to print said users information. and inform them how many people their are ahead of them, depending on the number of people their are in the array. and add their name to the list and then print the list. 
+
+
+    Note-Had no idea that \n made a new line, google is awesome. 
+
+    Variable Name .appTest
+
+        public double getOrderTotal(double[] lineItems) {
+        double sum = 0;
+        for (double i = 0; i <= lineItems.length; i++){
+            sum = sum + i;
+            System.out.println(sum);
+        }
+        return sum;
+    }
+
+    This adds all amount of the array together and returns 10, which is correct the way its set up just not what i want. enhanced for loop? ha it makes no sense, put two things together and what comes out, 

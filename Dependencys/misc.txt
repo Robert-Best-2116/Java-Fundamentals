@@ -1,0 +1,36 @@
+
+
+Checklist 
+
+  Open exam, review for similaritys, determine path 
+
+  Style it!
+
+	Rewright checkist afterwards. 
+
+  <div>
+    <h3>Posted by: <c:out value = "${show.user.userName}"/></h3>
+  </div>
+  <div>
+    <h4>Network: <c:out value = "${show.network}"/> </h4>
+      <p><c:out value = "${show.description}"/></p>
+  </div>
+  <div>
+    <c:set var="userId" value='<%= session.getAttribute("userId") %>'/>
+        <c:if test="${userId == show.user.id}">
+            <div>
+              <a href="/show/${show.id}/edit"><button>Edit</button></a>
+            </div>
+        </c:if>
+  </div>
+
+  <table>
+    <tbody>
+      <tr>
+        <td><h4>Network: <c:out value = "${show.network}"/> </h4></td>
+      </tr>
+      <tr>
+        <td><p><c:out value = "${show.description}"/></p></td>
+      </tr>
+    </tbody>
+  </table>

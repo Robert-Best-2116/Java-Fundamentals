@@ -1,0 +1,81 @@
+
+
+Hash Maps
+
+    While arrays and lits are useful, not everything is stored in a specific sequential order. there are many things in our life that we keep track of where we use key-value pairs. there are many examples, names to faces, places to experiences and so on. In code there are also countless caes where you will want to use key-value pairs, ids for database entrys, emails to users, etc, they are extremly usefull. on the java playform sets of key-value pairs are stored in whatare called maps. the Map type is implemented in a few different ways, the primary way is hashmaps. 
+
+    HashMap 
+
+        One of the most commonly used map implenetations in the javaplatform are HashMaps thease allow you to store sets of key value pairs, but does not set them in any order. even if you iterate through it. however if you require order you could use another implementation. but the most common is the hashmap as the order isnt that important. 
+
+    Usage
+
+        To first use a HashMap we must import it, from the java.util.HashMap; then you will need to create it. HashMap<String, String> userMap = new HashMap<String, String>(); the reason it is done that way is that we are declaring the value type, hashmap, then declaring what kind of values it will contain, in this case the key and the value are both strings, then we need to declare it, as a hashmap. 
+
+        Once created then it can be added too. we use the method .put to insert keyvalue pairs into it, so in this case userMap.put('nninja@codingdojo.com', 'Nancy Ninja'); 
+
+        To call them out we will need to create a new string variable, and assign it to the .get map function
+
+            String name = userMap.get('nninja@codingdojo.com'); 
+
+    
+    Iterating over a HashMap
+
+        There are a few ways to iterate over a HashMap. However a typical way to loop over a HashMap is by fist producing a set of the map keys usuing the .keySet(); method of the hashmap class. A Set is similar to a hashmap, instead of key-value pairs it only has values, but Set values are unique values, just as the keys are unique in a hashmap the values themselves are unique in a Set. Sets can be iterated over with an enhhanced for loop, so if you have the set of keys from your hashmap you can access the values in your map usuing each key as you iterate
+
+            import java.util.Set;
+                    Set<String> keys = userMap.keySet();
+                    for(String key : keys) {
+                        System.out.println(key);
+                        System.out.println(userMap.get(key));    
+
+
+        To iterate over a HashMap we intoduced a new type called set. which must also be imported from the java.util.Set; in java set is what is called an interface. By Definition a Set is a collection that contains no duplicates, which is perfect for a hashmap. therefor the keySet method returns a set of all of the keys in our map. then in the for loop we iterate over the set and print the keys and get the value in our map with said key.
+
+        The most common hashmap functions are clear, containsKey, ContainsValue, IsEmpty, keySet, remove, replace, size values, 
+
+
+
+Exception Handeling
+
+    Errors Happen! but in java we have a way to get around it. There are all sorts of times when we will get an error, and thats just life, however most of the code we work with will know when a risky operation is happening and will declare that it might throw an exception of a certain type. an example is you ask someone to pass a message, said person tells you i might not see them, and if i dont ill let you know, them passing the message is the risky operation, that they might not see them is the exeption, and them letting you know they dident see them is the exception. 
+
+    Try/Catch
+
+        In java we can utilize what is called the try statement, this will try out some risky code, and then catch any exceptional events that arries, 
+
+            class DeliverMessage{
+                public static void main(String[] args){
+                    Messenger friend = new Messenger();
+                    try{
+                        friend.deliverMessage();
+                        System.out.println("I passed that along")'
+                    } catch (DidNotSeeThemException e){
+                        System.out.println("They wernt there");
+                    }
+                }
+            }
+
+        
+        The first creates a new Messenger for us, then trys to deliver a message, since we know that the Messenger may not ese them we come up with a back up plan if that happens, so we try out delivering the message through our friend, and we catch any exception that the friend throws.
+
+        This is how it would work, except it would be some sort of database connection, file reading or writing, or other call that could result in an error, keep in mind that thease are for exceptional situations, and even though some langauges might encourage the use of try/catch blocks t ocontrol flow java is not one of them
+
+
+    Writing an Exception
+
+        we will need to import from java.util.Random;
+
+            import java.util.Random;
+            class DidNotSeeThemException extends Exception{}
+            class Messenger {
+                public boolean deliverMessage() throws DidNotSeeThemException{
+                    Random r = new Random();
+                    boolean sawThem = r.nextBoolean();
+                    if (sawThem){
+                        return true;
+                    }
+                    throw new DidNotSeeThemException();
+                }
+            }
+

@@ -1,0 +1,238 @@
+Variables
+
+    Type Declaration
+        Every Variable requires a type declearation when we initalize it, this is to help with spped and saftey, speed because all variables of the same type require the same amount of memoery, and by declaring the type at initialzatin, java is able to allocate only the proper amount, it helps with saftey because if we try to assign a value of the wrong type to a variable we wil lrecieve an error even before we try to run the code, it alows us to catch our mistakes before the program even runs, removing one big source of bugs
+
+            The pattern for declaringa varaible in Java is type variableName;
+
+            To assign a value to the variable use variableName = value; 
+
+        Default Values if left unassigned
+
+            int = 0 
+            double = 0.0 
+            boolean = false
+            String = null 
+
+        Naming Conventions
+
+            variable names should not be reserved keywords
+
+            use camel case
+
+            variable names cannot begin with a number or a whitespace, and should not use underscores thus camel case
+
+            make all of the variables descriptive
+
+        Data Types
+
+            Primitive
+
+                int: a number
+                long: a huge number
+                boolean: True or false
+                double: numbers with decimal
+                char: a single characater like $ or "R"
+
+            Object Types & Wrapper Classes
+
+                in additoin to primitive data types, Java also has Object Types, some of thease are built in-object types in java, thease built-in object types in java are called wrapper classes,. pretty much is a more robust version of the type data type that adds in functionality,not much information about it at this point theyll get to it later im sure. They allow the information to be used in conjuniction with other object types or data strucutres like array lists, 
+
+
+
+Conditionals & Operators 
+
+    Java uses conditionals like if-else statments, much like python and switch statments in conjunctoin with comparason operators and logical operators to control the flow of the program, in the same way all formal programing languages do 
+
+    If statments 
+
+        If statements are conditional statements that only execute under certan conditions 
+
+        if (condition) {
+            whatever its supposed to do 
+        }
+        Continue program
+
+        ex
+            Boolean isRaining = true;
+
+            if(isRaining) {
+                System.out.println('bring an umbrella.");
+            }
+
+
+    If-Else Chains
+
+    Much like python we use if else Chains
+
+        if(condition) {
+        // what to do if condition is true
+        }
+        else if(2nd condition) {        
+            // what to do if 2nd condition is true
+        }
+        // ... can have 0 to many else-if statements ...
+        else {                           
+            // what to do if none of the previous conditions are met
+        } // can have 1 or no else statement
+
+    ex
+
+        boolean isRaining = true;
+            
+        if(isRaining) {
+            System.out.println("Bring an umbrella.");
+        }
+        else {
+            System.out.println("Have fun!");
+        }
+
+
+    Ex Cont 
+
+        boolean isRaining = true;
+        boolean isCold = true;
+            
+        if(isRaining) {
+            System.out.println("Bring an umbrella.");
+        }
+        else if(isCold) {
+            System.out.println("Wear a coat.");
+        }
+        else {
+            System.out.println("Have fun!");
+        }
+
+    
+    Remember
+
+        A condition must always be a boolean value ie true or false 
+
+        If the condition is true then it will execute the block of code between the curly braces { } then skip any other else if or else staments in that chain and keep going
+
+        If the condition is false it will skip that block of code {  } but continue to the code immediatley following that block of code which may be another else if or else statement 
+
+
+    Assignment Operation Vs Comparison Operators
+
+        An assignment operator is an = it means that one thing = another aka assigns a value
+
+        A comparison operator evaluates eveything to a true or false stament, something either is or isnt equal to not equal greater than less than, greater than or less than etc, same shit as last time. 
+
+
+    Logical Operators
+
+        This is new, its a && sign, it means both conditions must be true, you use the comparison operators for thease, like finding an age range or something 
+
+
+        && both conditions must be true 
+
+            int age = 45;
+                
+            age < 65 && age > 17; 
+            // evaluates to true
+            //(Would pay adult price)
+                
+            age < 110 && age > 65; 
+            // false
+            // (Is not a senior, nor immortal)
+
+        || this one means or, one of the condtions must be true
+
+            int age = 77;
+            age < 10 || age > 65;
+            // true
+            // (Doesn't care what people think!)
+
+
+        ! means not, so if its not this then no 
+
+            int age = 16;
+            !(age < 16)
+            // true
+            // (May obtain a drivers license)
+
+
+Loops
+
+    While Loops
+
+        We look at the while loop before the four loop because a four loop is just a specialized while loop, to create a while loop we must specify the conditoin we will check after each loop, wheter if it is true or not, and the block of ccode to execute if the conditoin is true. If the condtion never turns false then the loop will be infiinite, and crash our computer, thus it is important to make sure that we are modifying aspects in the program that will eventually make the conditoin turn false, 
+
+            ex: this will run the loop until it is less than seven, it will print foo each time because why not. 
+
+                int i = 0;
+                while(i < 7)
+                {
+                    System.out.println("foo");
+                    i++;
+                }
+
+    For Loop 
+
+        In our previous example, we first initalized a variable called i to hold onto our starting number, second we determined the termination conditoin to check after each iteration, third we specififed the body of the while loop with a code block to execute on each iteration, fourth we made sure to modify the variable I in the code block, we can do this exzact same thing with a for loop. 
+
+            ex: basic for loop with explanation below.
+
+                for (int i = 0; i < 7; i++){
+                    System.out.println("bar");
+                }
+
+                for (initialization; termination; increment){
+                    body statements
+                }
+
+            
+            ex: some random shit
+
+                ArrayList<String> dynamicArray = new ArrayList<String>();
+                dynamicArray.add("hello");
+                dynamicArray.add("world");
+                dynamicArray.add("etc");
+                for (int i = 0; i < dynamicArray.size(); i++){
+                    System.out.println(dynamicArray.get(i));
+                }
+
+
+    Enhanced For Loop
+
+        Thease are for when you will need to assign the array element to a variable and minipulate it some way, but your unconcied about the current index
+
+            ex: example and explanation? dont really get this one yet
+
+                for(String name : dynamicArray){
+                    System.out.println("hello " + name);
+                    // other operations using name
+                }
+
+                for(element container : collection){
+                    // body statements
+                }
+
+
+    When not to use the enhanced for loop
+
+        there are sometimes we cant use the enhanced for loop, if we have this array of snacks and want to remove any that start with the letter A as shown below
+
+            ArrayList<String> snacks = new ArrayList<String> ();
+            snacks.add("Apples");
+            snacks.add("Pretzels");
+            snacks.add("Almonds");
+            snacks.add("Yogurt");
+            for(String snack : snacks ) {
+                if(snack.charAt(0) == 'A') {
+                    snacks.remove(snack);
+                }
+            }
+            // this will encounter an error like
+            // Exception in thread "main" java.util.ConcurrentModificationException
+
+                Itll Throw an Error
+
+        instead were doing a conventional for loop beause its better?
+
+            for(int i=0; i<snacks.size(); i++) {
+                if(snacks.get(i).charAt(0) == 'A') {
+                    snacks.remove(i);
+                }
+            }

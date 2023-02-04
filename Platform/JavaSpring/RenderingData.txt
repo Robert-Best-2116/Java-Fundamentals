@@ -1,0 +1,86 @@
+
+
+Rendering Data
+
+    In spring whenever you import Model into oyur controller you can use it as a container to store data and pass that data to the vie wengine, Data can be any time: objects,sprints, numbers or dates, and you can use it in any of your method signatures, when the framework gets a request mapped to that function, it will automatically create that Model instance container, the model variable in our code below is an example of dependecy injection, 
+
+    Think of the Model like a cup that is created, its empty, then filled with boxes of data that then get poured into the template as its being rendered. 
+
+
+    Controller View
+
+        public String, user(Model model) {
+
+            String firstName = "Ada';
+            String lastName = "LoveLace";
+            String email = "ones@zeros.com";
+            Integer age = 160;
+
+            model.addAttribute("first", firstName);
+            model.addAttribute("last", lastName);
+            model.addAttribute("email", email);
+            model.addAttribute("age", age);
+
+            return "index.jsp";
+        }
+
+    Index.JSP View
+
+        <h1> User Info: </h1>
+
+        <p><c:out value="${first}"/></p>
+        <p><c:out value="${last}"/></p>
+        <p><c:out value="${email}"/></p>
+        <p><c:out value="${age}"/></p>
+
+    
+    Its pretty important to zero in on what variables are being created and keep tracking the flow of data ie where it came from where its going
+
+    Its a good idea to check your page with the inspect tool, youl see the original values stored inside of the model attributes, lol its not a bad idea to do "sanity checks" once in a while to see what raw html was ultimatley written into the responce, as html dosent lie, meaning that the raw values of the model should be what shows up in the elements when you inspect the HTML, not the <p><c:out value="${first}"/></p>
+
+
+
+Adding CSS & JS 
+
+    Adding CSS or JS code to a srping boot project only takes a few steps, Spring book automaticly looksinside the static folder located at src/main/resources
+    This folder is where we put our static CSS and JS files, for file organization we will create a CSS folder and a JS folder, for this course all of our pages will dynamically render data from the server side usuing .jsp files, so we will store any files we want to render in the web-inf folder rather than in the static folder. 
+
+
+JSTL Capabilities 
+
+    JSTL tags can do alot, such as supporting all kinds of objects and other data, such as lists, as well as being able to loop over those lists, for example, in the controller we may have the following
+
+        Controller View
+
+            @RequestMapping("/dojos")
+                public String index(Model model) {
+                    ArrayList<String> dojos = new ArrayList<String>;
+                    dojos.add("Burbank");
+                    dojos.add("Chicago");
+                    dojos.add("Bellevue");
+                    dojos.add("Online");
+                    model.addAttribute("dojosFromMyController", dojos);
+                    return "dojoindex.jsp"
+                }
+
+        JST View
+
+            <h1>Dojo Locations</h1>
+            <c:forEach var="oneDojo" items="${dojosFromMyController}">
+                <p><c:out value="${oneDojo}"></c:out></p>
+            </c:forEach>
+
+    Similary if we have a collection type, say a List of Person objects, we could also ues the forEach tag. 
+
+        <c:forEach var="person" items="${people}">
+            <c:out value="${person.name}"/>
+        </c:forEach>
+
+    This will iterate over the people attribute passed from our controller and set each iterateion of the local variable of the person that we declared here. this will then be written into the HMTL delivered in the HTTP response. It is worth reiterating that the person in the above eaxample does not need ${} around it when it is declared, the ar attribute here is an iterator. Much like I or val, and when we use a string literal here to declare the variable name. the var can be named anything, but it is good practice to name it something similar to our list objects. var could be name banana for all intents and purpouses. 
+
+        <c:forEach var="banana" items="${people}">
+        <c:out value="${banana.name}"/>
+        </c:forEach>
+
+
+

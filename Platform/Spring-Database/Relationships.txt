@@ -1,0 +1,288 @@
+
+
+Relationships 
+
+    We are going to be learning how to create one to one and one to many relationships, then later addinga user model and multiple relationships, finally intoducing many to many relationships, we will be creating a new spring project named relationships, to code along with. 
+
+    Example Code 
+
+        @Entity
+        @Table(name="persons")
+        public class Person {
+            
+            @Id
+            @GeneratedValue(strategy = GenerationType.IDENTITY)
+            private Long id;
+            private String firstName;
+            private String lastName;
+            @Column(updatable=false)
+            private Date createdAt;
+            private Date updatedAt;
+            @OneToOne(mappedBy="person", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+            private License license;
+            
+            public Person() {
+                
+            }
+        }
+
+        @Entity
+        @Table(name="licenses")
+        public class License {
+            
+            @Id
+            @GeneratedValue(strategy = GenerationType.IDENTITY)
+            private Long id;
+            private String number;
+            private Date expirationDate;
+            private String state;
+            @Column(updatable=false)
+            private Date createdAt;
+            private Date updatedAt;
+            @OneToOne(fetch=FetchType.LAZY)
+            @JoinColumn(name="person_id")
+            private Person person;
+            public License() {
+                
+            }
+        }
+
+
+    Annotations Used 
+
+        @OneToOne: defines a 1:1 relationship with another entity, there are diffrent options that you can have in the annotation, and it is extreemly important to use the correct one depending on which side your entity is on 
+
+            @OneToOne(mappedBy="person"): this will map the licence attribute in the person class to the person attribute in the Licence class. It represents the field that owns the relationships, this element is only specified on the inverse (non-owning side) of the relationship meaning the one side, 
+
+            @OneToOne(cascade=CascadeType.ALL): The operations that must be cascaded to the target of the assocation, this will make sure referential integrety is preserved in all occasions. so, what i think that even means is that the links it creates usuing that associaton means that only the proper relationship will be created, so 1 id to 1 licence, 
+
+            @OneToOne(fetch=FetchType.LAZY): whether the assocation should be lazily loaded or must be eagler fetched, meaning
+                LAZY-The assocation is fetched only when needed 
+                EAGER- The assocation is fetched immediately 
+
+            @JoinColumn(name="person_id"): Defines mapping for composite foreign keys, indicates that the corresponding table to this entity has a foregin key to the refrenced table 
+
+        https://www.objectdb.com/api/java/jpa/OneToOne
+
+
+Case Study: Drivers Licence 
+
+    In this lession we will be walking through an application that will lalow users to create licenses for every person. The important questions will arise as you buil dthe one to many assignments in the next section. However this one to many case will be an into to how relationships in general are set up and used in spring 
+
+
+    Showing Licence Info for a Person 
+
+        In the last lession the code was provided for setting up a 1:1 relationship between two models, lets take a closer look atthe new code 
+
+            @OneToOne(mappedBy="person", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+            private License license;
+
+            @OneToOne(fetch=FetchType.LAZY)
+            @JoinColumn(name="person_id")
+            private Person person;
+
+        So Lets say in our controller we fetch a person out of the Database, calling ot our service, and to our repository, what would that look like? and how might we get that perosns name and licence info onto the page? 
+
+            Controller 
+
+                @GetMapping("/persons/{person_id}")
+                public String showPerson(@PathVariable Long person_id, Model model) {
+                    
+                    Person someAwesomePerson = personService.findById(person_id);
+                    model.addAttribute("person", someAwesomePerson);
+                    
+                    return "showPerson.jsp";
+                }
+                
+
+
+        Thats good for the controller, now for the jsp page its self, when accessing the licence information, due to it being bound to the persons information, we actually can use . notation for accessing the licence as well as its attributes that are specific to that one indivudal. 
+            
+            View.JSP 
+
+                <h1>Person Details:></h1>
+                <table class="table">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Name</th>
+                            <th>License Number</th>
+                            <th>State</th>
+                            <th>Exp Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <c:out value="${person.firstName}"/>
+                                <c:out value="${person.lastName}"/>
+                            </td>
+                            <td><c:out value="${person.license.number}"/></td>
+                            <td><c:out value="${person.license.state}"/></td>
+                            <td>
+                                <c:out value="${person.license.expirationDate}"/>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+
+    Data Binding with one to any 
+
+        This information applys to one to one and one to many, or 1:1 or 1:n 
+
+        How do you set up a one to one relationship between a particular person and a particular licence in the first place? we will need to ues data binding for creaitng a new license, just as we have in prior assignments. As the wireframe pointed out, we do not need a licence to create a person, but we will need a person to create a licence, as the licence is the dependent model in this relationship. We will have a drop down menu that we will populate with all the persons (people) in order to select the one whos licence we are creating, but what values are we sending to the server through the drop down select menu? 
+
+            Create JSP 
+
+                <!--- inside the form:form --->
+                    <!--- Drop down select menu --->
+                    <form:select path="person">
+                        <c:forEach var="onePerson" items="${persons}">
+                            <!--- Each option VALUE is the id of the person --->
+                            <form:option value="${onePerson.id}" path="person">
+                            <!--- This is what shows to the user as the option --->
+                                <c:out value="${onePerson.firstName}"/>
+                                <c:out value="${onePerson.lastName}"/>
+                            </form:option>
+                        </c:forEach>
+                    </form:select>
+                <!--- ... --->
+
+
+        As long as you have the empty model attribute in the form, for data binding you can either send back the id as the value or the object itsself, both will bind that particular person to the licence, and set the foreign key to the person_id and the post will look like this 
+
+            Controller
+
+                @PostMapping("/licenses")
+                public String licenses(@Valid @ModelAttribute("license") License license) {
+                    // error handling with binding result omitted    
+                    licenseService.create(license); // Already has the person!
+                        
+                    return "redirect:/persons";
+                }
+
+
+    One To Many Relationships
+
+        Code Example 
+
+            models/dojo 
+
+                @Entity
+                @Table(name="dojos")
+                public class Dojo {
+                    
+                    @Id
+                    @GeneratedValue(strategy = GenerationType.IDENTITY)
+                    private Long id;
+                    private String name;
+                    @Column(updatable=false)
+                    private Date createdAt;
+                    private Date updatedAt;
+                    @OneToMany(mappedBy="dojo", fetch = FetchType.LAZY)
+                    private List<Ninja> ninjas;
+                    
+                    public Dojo() {
+                        
+                    }
+                    // ...
+                    // getters and setters removed for brevity
+                    // ...
+                }
+
+            models/Ninja 
+
+                // ..
+                @Entity
+                @Table(name="ninjas")
+                public class Ninja {
+                    @Id
+                    @GeneratedValue(strategy = GenerationType.IDENTITY)
+                    private Long id;
+                    private String firstName;
+                    private String lastName;
+                    private int age;
+                    @Column(updatable=false)
+                    private Date createdAt;
+                    private Date updatedAt;
+                    @ManyToOne(fetch = FetchType.LAZY)
+                    @JoinColumn(name="dojo_id")
+                    private Dojo dojo;
+                    
+                    public Ninja() {
+                        
+                    }
+                    // ...
+                    // getters and setters removed for brevity
+                    // ...
+                }
+
+
+    New Annotations Used!!
+
+        @OneToMany: Defines a many-valued association with one-to-many multiplicity. This may be used within an embeddable class contained within an entity class to specify a relationship to a collection of entities, it contains after it a private list of what we want assocated. In english. we use the OneToMany annotation to specify what we want to have many of for our one selection. do we want many ninjas for one dojo, so we have the assocation OneToMany in the model for our dojo, followed by a private list with the type of our many, ie private List<Ninja> 
+
+            @OneToMany(mappedBy="dojo"): this maps the ninja attribute to the dojo meaning, the dojo is the main source, followed by the many ninjas, mapped by dojo, this maps the ninjas attribute in the dojo attribute in the ninja class, there are other options that will be shown in a link 
+
+        @ManyToOne: Defines a single-valued assocation to another entity class that has one many to one multiplicity. This may be used within an embeddable class to an entity class. the dojo attribute is refering to the dojo_id giving this attribute shows what dojo a specific ninja belongs to. Also in English. This is where we say that there can be many ninjas that belong to one dojo, we know which dojo they belong to with the dojo_id tag, marking them as which dojo they belong to. 
+
+        @JoinColumn(name="dojo_id"): Defines mapping for composite foreign keys. it indicates that the corresponding table to this entity has a foreign key to the refenced table. In English, this is how we create and know which dojo that the ninja belongs to. this ID will be what tells us. 
+
+
+    links
+        https://www.objectdb.com/api/java/jpa/OneToMany
+
+        https://www.objectdb.com/api/java/jpa/ManyToOne
+
+    
+    Potential Data Binding Issues 
+
+        When working with one to many relationships it is important to keep track of our path variables 
+
+        Up to this point we have used id as our path variable to access individual items, With this in mind it would make sense to access dojo 1 with the following path dojos/1 it would also make sense to acces ninja 1 with this path ninjas/1 however theres a problem D:! 
+
+
+        In ou rJSP we would have a form action path that looks like this ?dojos${id}/ninjas/new our controller would look like this. @PostMapping(“/dojos/{id}/ninjas/new”). This is where we run into trouble, we expect the path variable id to represent the dojo, but the data binding also assocates it with our ninja, we could create a new ninja, buttt once we create a second ninja, our first ninja would be updated, thus creating a put request instead of a post!!!!! D:! 
+
+        This is due to the way that the repository handels creates and updates, they both use the .save method, the deciding factor on which to do is whether or not an id is assocated with the object being saved, so in our case, when the dojo id matches a ninja id thats already in the database the ninja is updated. inorder to get around this issue we would need to give the path variable in our controller a new name!! so we would use /dojos/{dojoid}/ninjas/new instead it would fix our problem. we would go from this 
+
+
+            Wrong Code Example 
+
+                @PostMapping("/dorms/{id}/ninjas/new")
+                public String addNinja(
+                        @PathVariable("id") Long id, 
+                        @Valid @ModelAttribute("ninja") Ninja ninja,
+                        BindingResult result, 
+                        Model model) {
+                    if(result.hasErrors(){
+                        model.addAttribute("dojo", dojoService.find(id));
+                        return "showDojo.jsp";
+                    }else{
+                        ninjaService.create(ninja);
+                        return "redirect:/dojos/" + id;
+                    }
+                }
+            
+            Correct Code Example 
+
+                @PostMapping("/dorms/{dojoId}/ninjas/new")
+                public String addNinja(
+                        @PathVariable("dojoId") Long id, 
+                        @Valid @ModelAttribute("ninja") Ninja ninja,
+                        BindingResult result, 
+                        Model model) {
+                    if(result.hasErrors(){
+                        model.addAttribute("dojo", dojoService.find(id));
+                        return "showDojo.jsp";
+                    }else{
+                        ninjaService.create(ninja);
+                        return "redirect:/dojos/" + id;
+                    }
+                }
+
+        While this may be an edge case, it is important to know what is happening behind the scenes, 
+
+        link 
+
+            https://docs.spring.io/spring-framework/docs/current/reference/html/web.html#mvc-ann-modelattrib-method-args

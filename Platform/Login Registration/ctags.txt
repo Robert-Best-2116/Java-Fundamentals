@@ -1,0 +1,27 @@
+<c:set var="val" value="5"/>
+<!--        ----          -->
+<c:choose> 
+  <c:when test="${val == '5'}">
+    Value is 5
+  </c:when>
+  <c:when test="${val == '10'}">
+    Value is 10
+  </c:when>
+  <c:otherwise>
+    Value is not 5
+  </c:otherwise>
+</c:choose>
+
+<!-- ---------------------- -->
+<c:if test="${!condition}">
+    //else
+</c:if>
+<!-- ---------------------- -->
+
+<c:set var="userID" value='<%= session.getAttribute("userId") %>'/>
+		<c:if test="${userID == book.creator.id}">
+			<div class="d-flex justify-content-end">
+				<a class="btn btn-primary me-2" href="/books/${book.id}/edit">Edit</a>
+				<a class="btn btn-primary" href="/books/${book.id}/delete">Delete</a>
+			</div> 
+		</c:if>

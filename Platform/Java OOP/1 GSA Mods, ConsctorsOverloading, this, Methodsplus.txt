@@ -1,0 +1,354 @@
+
+
+
+Getters, Setters & Access Modifiers
+
+    Getters & Setters
+
+        Memeber variablese are typically delared inside the class before any methods and are accessed via getter and setter methods, the Variables themselves should almost always be declared as private to prevent direct access to the field from other parts of the application, so you can control how they should be used in a uniform way. Getters are methods that retieve a field value and setters rae methods that set the field value, so lets build an example class
+
+            class Vehicle {
+                private int numberOfWheels;
+                private String color;
+
+                Getter Method 
+                public int getNumberOfWheels(){
+                    return numberOfWheels;
+                }
+
+                Setter Method
+                public void setNumberOfWheels(int number) {
+                    this.numberOfWheels = number;
+                }
+
+                Getter Method
+                public String getColor() {
+                    return color;
+                }
+
+                Setter Method
+                public void setColor(String color) {
+                    this.color = color;
+                }
+
+            }
+
+                Note- the this keyword is used to indicate that it is refrencing the instance variable not the parameter variable. ie the object not the class.
+
+        
+
+        Now we are going to create the test class
+
+            class VehicleTest {
+                public static void main(string[] args) {
+                    
+                    Vehicle bike = new Vehicle();
+                    Vehicle car = new Vehicle();
+                    bike.setNumberOfWheels(2);
+                    bike.setColor("red");
+                    int bikeWheels = bike.getNumberOfWheels();
+                    String bikeColor = bike.getColor();
+                    car.setNumberOfWheels(4);
+                    car.setColor("green");
+                    int carWheels = car.getNumberOfWheels();
+                    String carColor = car.getColor();
+
+                    System.out.println("Bike object - Wheels: " + bikeWheels + ", Color: " + bikeColor);
+                    System.out.println("Car object- Wheels: " + carWheels + ", Color: " + carColor);
+                }
+            }
+
+            Output
+
+                Bike object - Wheels: 2, Color: red
+                Car object - Wheels: 4, Color: green
+
+
+        While it is repetitive to write getters and setters for every field, it is part of writing good extensible java code that we explicitly declare access privileges for any memeber variable that we want to expose to the outside world namely code written by other programmres, other parts of the appplication and or externinal appications. 
+
+
+
+Constructors and Method Overloading
+
+    A Constructor method is a special function that gets called when an instance of an object is created. the diffrence between a constructor method and the other methods are
+
+        1. it dosent have a return type
+        2. the name of the constructor must be the same as the name of the class to which it belongs
+        3. a constructor is called automatically when a new instance of an object is created. 
+
+    Constructor methods are used to execute some block of code on object instantiation. For example, what if we wanted to set the color of our Vehicle class to a default instead of calling the setter method after weve created the object. 
+
+        class Vehicle {
+            private int numberOfWheels;
+            private String color;
+
+            public Vehicle(String color) {
+
+                This is setting the color attribute to the value from the color parameter.
+                this.color = color;
+            }
+        }
+
+        class VehicleTest {
+            public static void main(String[] args) {
+                Vehicle redVehicle = new Vehicle("red");
+                String color = redVehicle.getColor();
+                System.out.println("The Vehicle color is: " + color);
+            }
+        }
+
+        Output The Vehicle color is: red
+
+    
+    Notice that in our VehicleTest file we had to pass the string red when we created the object, if we were to try to create an object without passing a string as an argument, the complier would throw an error, to allow multiple ways to instantiate our objects, we must overload the constructor method.
+
+        
+        class Vehicle {
+            private int numberOfWheels;
+            private String color;
+
+            ex new Vehicle
+            public Vehicle(){
+            }
+
+            ex new Vehicle ('someColor')
+            public Vehicle(String color) {
+                // were setting the color attribute to the value from the color parameter
+                this.color = color;
+            }
+
+            ex new Vehicle ("someColor", 4)
+            public Vehicl(String color, int num){
+                this.color = color;
+                this.numberOfWheels = num;
+            }
+
+        }
+
+    Overloading a method is just defining new method signatures for the same method name. we can now instanciate the vhicle object in three diffrent ways. new Vehicle(), new Vehicle('someColor'), and new Vehicle('someColor', 4). Remember that the method overloading technique is not only for constructors, any method can be overloaded, a great use case for method overloading is to set default parameter values. 
+
+
+
+This Keyword 
+
+    Java the this keyword refers to the current object within the context of an intance method or consructor. the current object is the simple object whos method or constructor is being called. You can refer to any memeber variable of the current object usuing this. for example
+
+        class Person  {
+            private int age;
+            private String name;
+            public Person(int ageParam, String nameParam) {
+                this.age = ageParam;
+                this.name = nameParam;
+            }
+        }
+
+    is the same as this
+
+        class Person {
+            private int age;
+            private String name;
+            public Person(int ageParam, String nameParam) {
+                age = ageParam;
+                name = nameParam;
+                ]
+            }
+        }
+
+    
+    both of thease code samples do exzactley the same thing. you can refer to this in any method of your class, there is one case in whic hyou must use this. if one of your parameter variables shares the same name as one of your memeber variables
+
+        class Person {
+            private int age;
+            private String name;
+            public Person(int age, String name) {
+                this.age = age;
+                this.name = name;
+            }
+        }
+
+            Note- we can not use age=age as age is a local variable in the consructor method and its value is the very first argument
+
+    
+    Constructor Overloading 
+
+        One of the other uses of the this. keyword is when you have overloaded the consructor, but dont want to have to write any repetitive code. Imagine that you have written out a constuctor that takes an int a string and another int, but also want there to be an empty constructor with default values, you can implement that as shown below
+
+            
+            public class Person {
+                private int age;
+                private int cmHeight;
+                private String name;
+                public Person () {
+                    this(20, "John Doe", 171);
+                }
+
+                public Person(int age, String name, int cmHeight) {
+                    this.age = age;
+                    this.name = name;
+                    this.cmHeight = cmHeight;
+                }
+            }
+
+        
+        In this case it must be the first statement in the consructor and it wil lcall the other constuctor for me
+
+
+    Object Superclass
+
+        This. refers to your object and given that all objects are descendants of the Object class, this means we are able to use methods inherited from the Object class, The Object class is considered a superclass because it is at the top of the class Hierarchy. It contains some methods that all of our objects can use. but to access them you have to use the this keyword. some of the most used methods fro mthe Object class are 
+
+            .getClass() returns a class object that reprsents the objets current class
+            .equals() comaprs two objects for equality and returns a boolean.
+            .toString() return a string representation of the object. if yo uwant you can override this method.
+
+
+                class Person {
+                    private int age;
+                    private String name;
+                    public Person(int ageParam, String nameParam) {
+                        this.age = ageParam;
+                        this.name = nameParam;
+                    }
+
+                    public void objectMethods(Person anotherObject) {
+                        System.out.println("Class name: " + this.getClass().getSimpleName());
+                        System.out.println("toString: " + this.toString());
+                        System.out.println("equals: " this.equals(anotherObject));
+                    }
+
+                class PersonTest {
+                    public static void main(String[] args) {
+                        Person person1 = new Person(10, "Person1");
+                        Person person2 = new Person(5, "Person2");
+                        person1.objectMethods(person2);
+                    }
+                }
+
+                Output 
+                    Class name: Person
+                    toString: Person@7852e922
+                    Equals: false
+
+
+
+    More On Methods
+
+        A Method is just a function that belongs to a class. it is a sequence of statements that are groupled together to perform a certain task. A method can do things like print, get, set, or delete information or anything else you can think of, we name methods after verbs, (classes are named after nouns descirbing what they do) methods are what the class does so verb names are very appropreate, like getHeight, setSpeed, isValid
+
+        one of the most important concepts relating to oop is that objects only share certain aspects about themselves publicly, The idea is that we can create objects with public methods that deal with how to interact with the object but we keep all the details about the logic we are perofmring insode those functions Private. this gives us alot of control over what sort of infrmation we broadcast and it also allows us to write code that is more flexible and ready for change. 
+
+        For a real-world analogy, lets use an old fasioned stereo, we want the user to be able to access the buttons and switches on the outside of the stereo, to be able to turn on or change the volume or station we are listening too. However we would not want to share information about the algorithm we use to translate the sound input into something th speakers produce. Sharing that information wouldent assist the user or make the object easer to use. and it would also make it more difficult to update the internal code to a newer and better version while keeping the interface the same. 
+
+        Taking a look at our greeter class, what needs to be public? what needs to be private? How we design a class to only expose the esensals, and keep the rest private? the greet methods should remain public, but what about what they actually do? we could first pull out the raw essentials and create a private method based upon the core of what we want the public method to do. and create the private method createGreeting
+
+            private String createGreeting(String toBeGreeted){
+                return "Hello " + toBeGreeted;
+            }
+
+        This could then be used by both of our greet methods, the empty one and the one with variables in it. the zero variable has the string automacily passed in and is unchanging, the second will have the variables. 
+
+            public String greet(){
+                return "Hello " + toBeGreeted;
+            }
+
+            public String greet(String firstName, String lastName){
+                return createGreeting(firstName + " " + lastName);
+            }
+
+        this design would allow us to change how we greet, in this case change from the word hello to something else like greetings, 
+
+            private String createGreeting(String toBeGreeted) {
+                return "Greetings" + toBeGreeted;
+            }
+
+
+    Defining Terms
+
+        Every method has the following parts, modifiers, return type, method name, and method body, lets break down the createGreeting method we just made in detail and look at the sum of its parts. 
+
+            Modifers- Private, Public, Protected, are the access modifiers that defines the access type of the method, the private method will only be visible to the object itsself and cannot be called from other classes. there are also modifiers such as static that we will explore later, 
+
+                Private-Only the class in which it is declared can see and access the method. this is the most restricitive access level. 
+
+                Protected-Protected access gives subclasses a chance to use the method, while preventing a nonrelated class from trying to use it. 
+
+                Public-Every class everywhere has access to the method.
+
+            Return Type- String, int, double, bolean, or void, are the return types that are declared to say what a method will return. in Java you must specify what dat atype your method will return otherwise it will result in an error. 
+
+            Method Name- createGreeting is the method name. The convention for choosing a name for your method depends on what return type the method has. If the method returns a boolean, the convention is to ask a question in the name, that way, the names are read like they would have a question mark at the end, is the collection empty? is the user logged in? does the element have items?? we use lowerCamelCase for method names, for non boolean methods we will use either verbs, or get and set for property values, eg getValue, setValue, Greet, AddToList, createGreeting 
+
+            Parameter List- This is common to all programming languages, whatever is enclosed in the opening and closing parenthesis are called parameters. i nthe createGreeting method, notice that we specifically declare a datatype again for our toBeGreeted variable, declearing the datatype is required when there are parameters
+
+            Method Body- The line return "Greetings " + toBeGreeted; in the createGreeting is part of the method body. the method body defines the instructions that are to be executed when the method is called. it is all the code between the curly braces {} 
+
+            Method Type- Static defines the method to be a class method, that is invoked without refrence to an object. 
+
+            Static Modifer- This is the most common modifer you will see that is not an access modifer, this modifer defines the method as a class method, which means it can be invokeed without referencing a particular object. Static methods can be called without creating an object. which is why we write the satic keyword when creating the main method, this is because the program executing begins from main and no object has been created yet. Class methods are useful for creating constants and class fields that need to be used throughout a program. one ruel-of-thumb to ask yourself, does it make sense to call this method, even if an object has not been constructed yet? if so that method should be static, apprently there is a math class. it dose not need to be instantiated, it jus tneeds to have its methods called. 
+
+
+    Static Variables And Static Methods
+
+        In this lession we are going to go over the static keyword to create attributes and methods that belong to the class. instead of the instance of the class. memeber variables are a way for all of our objects to have their own unique variables. However sometimes we will want variables that are shared accross all objects, we achieve that by creaitng class variables. thease variables are all in one fixed location in memeory, and all objects have access to it. it is also accessible without even creating an instances of the class. so suppose that we want to keep track of how many objects from the person class we have created we wil need to ues a class variable to hold onto the current count of the person objects created. 
+
+            public class Person {
+                private int age;
+                private String name;
+                public static int numberOfPeople = 0;
+
+                public Person(int ageParam, String nameParam){
+                    age = ageParam;
+                    name = nameParam;
+                    numberOfPeople++;
+                }
+            }
+
+
+            public class PersonTest {
+                public static void main(String[] args) {
+                    Person person1 = new Person(10, "person1");
+                    Person person2 = new Person(5. "Person2");
+                    System.out.println(Person.numberOfPeople);
+                }
+            }
+
+            output: 2
+
+
+    Static Methods
+
+        When we create static variables it is common practice to create static methods to access the said variables. Lets refactor the above example with static methods
+
+            public class Person {
+                private int age;
+                private String name;
+                private static int numberOfPeople = 0;
+
+                public Person(int ageParam, String nameParam){
+                    age = ageParam;
+                    name = nameParam;
+                    numberOfPeople++;
+                }
+
+                public static int peopleCount() {
+                    return numberOfPeople;
+                }
+            }
+
+            public class PersonTest {
+                public static void main(String[] args) {
+                    Person person1 = new Person(10, "person1");
+                    Person person2 = new Person(5. "Person2");
+                    System.out.println(Person.peopleCount);
+                }
+            }
+
+            output: 2
+
+
+        Its important to note that class methods cannot access instance variables or instance methods directley, in addtion class methods cannot use the this. keyword as there is no instance for this to refer too. 
+
+
+Franks Assitance
+
+    scope and lifetime of variable

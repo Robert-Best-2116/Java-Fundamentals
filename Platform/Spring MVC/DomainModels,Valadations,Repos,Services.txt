@@ -1,0 +1,223 @@
+
+
+Domain Name and validation Annotations 
+
+
+    What we do here is setting up a table inside of the schema without usuing mysql, it will also require a new depency, which is refrenced in the JSPDependencyAndTags.txt file 
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>   
+
+
+    Domain Model, 
+
+        The domain model is simply a java bean that represents our "buissness data" or the information that we want about a particular thing. in this class we will create a modle class for a book resource, 
+
+
+            Note the following is a mock up of a database, 
+
+
+                    @Entity
+                    @Table(name="books")
+                    public class Book {
+                        @Id
+                        @GeneratedValue(strategy = GenerationType.IDENTITY)
+                        private Long id;
+                        @NotNull
+                        @Size(min = 5, max = 200)
+                        private String title;
+                        @NotNull
+                        @Size(min = 5, max = 200)
+                        private String description;
+                        @NotNull
+                        @Size(min = 3, max = 40)
+                        private String language;
+                        @NotNull
+                        @Min(100)
+                        private Integer numberOfPages;
+                        // This will not allow the createdAt column to be updated after creation
+                        @Column(updatable=false)
+                        @DateTimeFormat(pattern="yyyy-MM-dd")
+                        private Date createdAt;
+                        @DateTimeFormat(pattern="yyyy-MM-dd")
+                        private Date updatedAt;
+                        
+                        public Book() {
+                        }
+                        public Book(String title, String desc, String lang, int pages) {
+                            this.title = title;
+                            this.description = desc;
+                            this.language = lang;
+                            this.numberOfPages = pages;
+                        }
+                        
+                        // other getters and setters removed for brevity
+                        @PrePersist
+                        protected void onCreate(){
+                            this.createdAt = new Date();
+                        }
+                        @PreUpdate
+                        protected void onUpdate(){
+                            this.updatedAt = new Date();
+                        }
+                    }
+
+
+        Once this is put in and the data is saved/applacation refreshed the database will then have a table called books inside of it, which is pretty dope to be honest. 
+
+
+    Valadation Annotations 
+
+
+        @Entity: represents an entity model for our applicaiton 
+        @Table: sets this as a table in the database 
+        @Id: sets this as the primary key
+        @GeneratedValue: sets this as an auto-Incrementing value 
+        @Size: adds validation that the columnmust be in the specififed range 
+        @Min: adds valadation that the column must be at least the specified value 
+        @NotNull: adds valadation that the column must not be null 
+        @PrePersist: runs the method right before the objrect is created 
+        @PreUpdate: runs a method when the object is modified 
+
+
+Created at and Updated at
+
+    It is often the case that we want to keep track of when something was created and when it was changed, this is tedious and unnessisary to put into our code everywhere, so we have the benefit of two annotaitons to help us with this or any other task that should awlays happen before we created or save our object, to always do something before we save an object for the first time we have to @PrePersist and to do something before we save everytime we have @PreUpdate For example we can use thease with our books model to take care of the updated and created at values for us. 
+
+        Note we need to import java util date not mysql date 
+
+
+Repositories!!!
+
+    :D! Data Repositories are where we gain access to all our data once we start talking with the database, what does that mean though D:? To quote a man ive never heard of, eric evans, of domain driven design: " a repository represents all objects ofa certan type as a conceptual set. It acts like a collection, except with more elaborate querying capability" 
+
+    First thing we need to do is create a package in our MVC section, and call it repositories, then we will make our BookRepository interface, not class, interface, and extend the CrudRepository, we do that so that way it can have access to all of the crud features without us having to write alottt of code. 
+
+        @Repository
+        public interface BookRepository extends CrudRepository<Book, Long>{
+
+            // this method retrieves all the books from the database
+            List<Book> findAll();
+
+            // this method finds books with descriptions containing the search string
+            List<Book> findByDescriptionContaining(String search);
+
+            // this method counts how many titles contain a certain string
+            Long countByTitleContaining(String search);
+
+            // this method deletes a book that starts with a specific title
+            Long deleteByTitleStartingWith(String search);
+        }
+
+    This creates a repository for us that will expose the Spring Data JPA. This will allow for a variety of methods as well as allow us to extend it, without any further code, it will allow us to create, read, update and destroy our books, as it is a crud repo we are extending 
+
+    the spring data JPA query creation can seem magical at first D:! and it takes some experience writing in it to get a good feel for the queries but it will automatically buold queries from method names in your interfae, 
+
+
+    A List of the most practical methods and their descriptions. 
+
+        https://docs.spring.io/spring-data/commons/docs/current/api/org/springframework/data/repository/CrudRepository.html
+
+
+    More indepth list of queries, 
+
+        https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.query-methods.query-creation
+
+
+    Repo Keywords 
+
+        https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#repository-query-keywords
+
+    Some Examples 
+
+        https://www.baeldung.com/spring-data-derived-queries
+
+
+
+Services
+
+    Services are the buissness logic of our application, for example, a controller should never be doing something like creating five books, if we needed that same information in another controller, we would have to rewrite the same code, again, and that would not make for very DRY code, Instead we create a service layer, we want skinny controllers and fat models in MVC 
+
+
+    To start, we create a service, we start with making a package, we name said package services, inside of the package we create a class named BookService, To declare the class as a service, we will use the @Service annotation, this alows spring to inject this class as a dependcy in any controller, also to access the database we will need to use dependency injection for the repo, by adding private final BookRepository bookRepo, then we will need to call upon the service, BookService(BookRepository bookRepo) follwed by { this.bookRepo = bookRepo ;}
+
+
+        Example Code 
+
+                import org.springframework.stereotype.Service;
+                import com.codingdojo.mvc.models.Book;
+                @Service
+                public class BookService {
+                    // adding the book repository as a dependency
+                    private final BookRepository bookRepository;
+                    
+                    public BookService(BookRepository bookRepository) {
+                        this.bookRepository = bookRepository;
+                    }
+                    // returns all the books
+                    public List<Book> allBooks() {
+                        return bookRepository.findAll();
+                    }
+                    // creates a book
+                    public Book createBook(Book b) {
+                        return bookRepository.save(b);
+                    }
+                    // retrieves a book
+                    public Book findBook(Long id) {
+                        Optional<Book> optionalBook = bookRepository.findById(id);
+                        if(optionalBook.isPresent()) {
+                            return optionalBook.get();
+                        } else {
+                            return null;
+                        }
+                    }
+                }
+
+
+    In our service, we created 3 methods, One to retrieve all the books, one to create a specific book, and one to retrieve a specific book. the findbyId method returns an optional object that may or may not contain our book object, we call the isPresent() method to heck if our object exists, if it does we return our book object by calling the get() method, if it does not we return null. 
+
+
+
+Setting up our API! 
+
+    Now that we have domain models, repos, and services, we can finally create our API to execute basic crud operations, first we will need to create a controller, to test our API we will be usuing PostMan, which i will now download, its simple, but the video helps :D! 
+
+    Well need to create a new package called controllers, then a new class inside of that a new class called BooksApi, as well as add the private final BookService bookServ; and then the public BooksApi(BookService bookServ) {this.bookServ = bookServ ;}
+
+        Example Code 
+
+                import com.codingdojo.mvc.models.Book;
+                import com.codingdojo.mvc.services.BookService;
+                @RestController
+                public class BooksApi {
+                    private final BookService bookService;
+                    public BooksApi(BookService bookService){
+                        this.bookService = bookService;
+                    }
+                    @RequestMapping("/api/books")
+                    public List<Book> index() {
+                        return bookService.allBooks();
+                    }
+                    
+                    @RequestMapping(value="/api/books", method=RequestMethod.POST)
+                    public Book create(@RequestParam(value="title") String title, @RequestParam(value="description") String desc, @RequestParam(value="language") String lang, @RequestParam(value="pages") Integer numOfPages) {
+                        Book book = new Book(title, desc, lang, numOfPages);
+                        return bookService.createBook(book);
+                    }
+                    
+                    @RequestMapping("/api/books/{id}")
+                    public Book show(@PathVariable("id") Long id) {
+                        Book book = bookService.findBook(id);
+                        return book;
+                    }
+                }
+
+    The private final BookService bookServ tells us that we are going to be usuing a bookServ and that it will not be changing, then we use depency injection to make it avaiable to our controller. 
+
+
+Service Layer??
+
+    Why we are usuing a service layer when we could simply use the repo in our controller? the purpouse of the servie layer is to perofrm any buissnes logic before usuing the repo to perofrm queries in short, laying provides seperation of concerns. the value of sepearitng concerns becomes more apparent as our applications grow! 
+

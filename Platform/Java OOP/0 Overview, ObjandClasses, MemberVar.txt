@@ -1,0 +1,108 @@
+
+
+OOP Overview
+
+    Object Oriented Programing (OOP) is something that has revolutionized the way programming is done today. it was invented to help programmers better model complex real-world situatinos but was quickly found to be usefull in all sorts of situations, OOP is baked into the way that Java works, gaining a strong fonudation in OOP will help you to avoid repeating code and make your programs safer and mor eunderstandable. In this chapter i will learn the OOP principles to help me better understand how to organize my code in the future. 
+
+        Understand what objects and classes are and why they are useful
+        Become firmilar with how to create classes and objects in Java
+        Instantiate objects with custom initial values usuing a constructor method
+        Assign and re-assign diffrent values to diffrent instances of the same class. 
+        Use access modifer to control the use of class data(public/private)
+        Write code that has object instanes interacting with each other
+        Implement static methods that can be called from the class itsself, rather than a particular instances
+
+
+
+Objects and Classes
+
+    Super useful tidbit from the video! i know im surprised too!, Classes should be named after nouns, that have similar functionality to what the class its self does.  Object orented programming is all about objects, an object is a collection of bejaviors and properties that all revovlve around the same concept, this ocllection of behaviors and properties are called instance members. the cookie, objects were originally used to model real-world objects or situations, but can and are used for all sorts of applications. they are resuable and are created from bluprints known as classes-the cookie cutter. 
+
+    for example, if someone wanting to model the behavior of a solar system might create objects to represent the stars, planets moons and asteroids involved. each object would be able t ohave fields, aka attributes to store data about the object as well as methods, which are the actions the object can perform. a planet might have fields such as mass rotationSpeed and currentPosition as well as methods like determineNewPosistion();
+
+    Objects wouldent be that useful if we had to create each one individually itd be alot of wet code, so the desisngers of OOP languages built a way to create blueproints that can be used t ocreate and customies lots of objects of a particular type. thease bleuprints are knonw in java as Classes and should be named with a noun desciribing what the concept of the class is.
+
+    You create a Class in java by starting with the keyword class. and the name fo the class followed by opening and closing curly braces {} the naming convetnion in java is to use PascalCase, you capitalize the first lettetr of every word in the variable and do not use dashes or sapces to seperate them.
+
+    In Java you can have multiple classes in the same file, but only one class that is public, that public class needs to be named identically to the files name and should be named usuing a noun. 
+
+    in our GreeterTest file we can create Greeter objects which are just rin-time entities crated from a class. the object is a particualr instance of a class, and each object is unique. 
+
+
+
+Memeber Variables
+
+    Previously we reviewed methods. in short methods are actions or functions that belong to a class, and as such are grouped and used together to appy related functinoality. now we will look at how we can also group data together as member variables inside a class to make our own custom data types. 
+
+    Related Functionality in One Place 
+
+        When we wrote teh functionlaity for the Alfred Bot, all of our methods were part of one class. anytime i wante to use AlfredQuotes functionality we could use all of the AlfredQuotes methods by makig one single instance of that class from your file. once i had all of the alfredquotes instances intalized in the test file, i was able to call upon any method usuing . notation. Many libraries tool sets are written this way, putting related methods inside a class
+
+    
+    Custom Data Types
+
+        Object Oriented Programing was not orginally developed to just roup related functions together, while this is one feature, another primary purpouse for OOP is creating custom data types. If you take an array for example, a built in composite data type in all scripting languages, it has methods and member variables that you have already used quit ea bit. practically any time you use array data types you are usuing that data types methods and storing member variables right and left, so anytime ive used . notation arr.length for example, or someList.add("a thing"), your breatking into an object instance meaning an intance of some class thats keeping or storing data data for that specific variable. in this case the length of the array, and the ability to add a string or a number to the array. the . notation is an indication that we are dealining with implemented OOP.
+
+            String[] fruits = {"peach", "mango", "banana"};
+            System.out.printf("Length: %s", arr.length);
+            ArrayList<Integer> nums = new ArrayList<Integer>();
+            nums.add(42);
+
+                Here we are findining out the length of the array by accessing it with .length, and the second one we are adding the number 42 to a new array list. 
+
+
+    Memeber Variables.
+
+        So add() is an array list method, but what is .length? .Length is an example of whats called a member variable in java. an example of a member variable for a Car class would be color. in java attributes are refered to as member variables or fields. There are three types of variables in Java and it is important to diffrentiate the diffrent types of variables that can be in a Java class
+
+            Memeber Variables- Object attributes or fields that belong to a data type or class
+
+            Local Variables- Variables within methods code blocks that are not member variables, thease are the primary type of variable that we have been usuing so far. they are more temporary as they dissapear when the method ends, ie goes out of scope or returns.
+
+            Parameter Variables- Thease are declared in the method signature, (the information between the parentheses) which are also tempoary. 
+
+        
+                Note- Memeber Variables can also be called members, attributes, instance variables, fields, and properties. theaes all refer to the same thing, but in java they are typically refered to as member variables 
+
+
+        Lets look at how we can implement a Car class as part of a data maintenance system for an auto-body shop. so lets give it some member variables
+
+            class Car {
+                public int year;
+                public String make;
+                public String model;
+                public String color;
+            }
+
+
+        To use it in a diffrent file, like our main file, we create an instance, which is a specific vehicle, and keep track of data about it such as milage, the data we add to the instance sticks with it and is stored in a spot in memory allocated for that variable, like a file in a cabinet for a specific customer to assign update and read values, we will use .notation 
+
+
+            EX:
+
+                class CarTest {
+                    public static void main(String[] args) {
+                    
+                        // Create a new car, and assign it some values
+                        Car client1Car = new Car();
+                        client1Car.year = 2001;
+                        client1Car.make = "Honda";
+                        client1Car.model = "Civic";
+                        client1Car.color = "white";
+                    
+                        // Create another new car, and assign it some values
+                        Car client2Car = new Car();
+                        client2Car.year = 2018;
+                        client2Car.make = "Mazda";
+                        client2Car.model = "CX-3";
+                        client2Car.color = "navy";
+                    
+                        // Now they have their own individual data stored together.
+                        System.out.println("Car 1 make: " + client1Car.make);
+                        System.out.println("Car 1 model: " + client1Car.model);
+                    
+                        System.out.println("Car 2 make: " + client2Car.make);
+                        System.out.println("Car 2 model: " + client2Car.model);
+                    }
+                }
+

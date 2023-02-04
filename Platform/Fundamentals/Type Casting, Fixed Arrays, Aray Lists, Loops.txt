@@ -1,0 +1,188 @@
+Type Casting
+
+    Explicity Casting
+
+        Explicitly casting is when we declare the type that we want t oconvert to in our source code. for example
+
+            double d = 35.25;
+            int i = (int) d;
+
+            See here how we declared that the variable d would be type cast as an int if we were to print this it would remove the decimal places because int types do not have decimals 
+
+    Implicit Casting
+
+        Depending on the context, Java will implicitly cast ypes for us
+
+            int i = 35;
+            float f = i;
+
+            if we were to print this it would turn out 35.0 automaticly adding the decimal
+
+            if we were to print this System.out.println("the number is : " + f);
+
+            it would automaticly turn the variable f into a string inorder to concatenate it
+
+    Primitive vs Object types
+
+        When should we use primitive and object types?
+
+            1 Performance: Object types are an instance ofa class. they usually hold data and methods. Therefor, their memory capacity is much bigger than their primitive counterpart. 
+
+                public static void main(String[] args) {
+                    long start = System.currentTimeMillis();
+                    Integer sum = 0;
+                    for (int i = 0; i < Integer.MAX_VALUE; i++) {
+                        sum += i;
+                    }
+                    System.out.println("Sum: " + sum);
+                    long end = System.currentTimeMillis();
+                    double total = (double) (end - start) / 1000;
+                    System.out.println("Time of execution: " + total + " seconds");
+                }
+
+            So in this code above us it will run the for loop to determine the current time in milliseconds. as well as some other code that i dont really understand yet, but the output of it will tell you how long it took inorder for the integer to go to its max value 
+
+            The output when they ran this code is Sum: 1073741825, Time of execution: 6.477 seconds
+
+            Apparently thats a long time to get the sum of integers, beings that the sum variable is set to the type Integer, which is the class instance, it is creating a class instance of sum with the value i every single time we iterate through the loop, which is unnessary. in order to speed up this process all we need to do is declare the variable sum to be an int, the primitive value type from the beginning. 
+
+                public static void main(String[] args) {
+                    long start = System.currentTimeMillis();
+                    int sum = 0;
+                    for (int i = 0; i < Integer.MAX_VALUE; i++) {
+                        sum += i;
+                    }
+                    System.out.println("Sum: " + sum);
+                    long end = System.currentTimeMillis();
+                    double total = (double) (end - start) / 1000;
+                    System.out.println("Time of execution: " + total + " seconds");
+                }
+
+            The output of this line of code where the sum is type cast as the primitive data type int, is much quicker. Time of execution: 0.763 seconds
+
+
+            2. null values: primitive data types can only hold data. However object types are pointers to where the data is stored, this means that the pointer can point to nothing(null) while the primitive types cannot.
+
+                public class TestNull {
+                    public static void main(String[] args) {
+                        Integer a = 10;
+                        int b = 10;
+                        a = null;
+                        b = null;
+                    }
+                }
+
+            Above we are changing the value of the Integer and of the int, to be a null value, which is not a number, if we were to compile and run this we would get a compiling error, for incompatible types, as a null cannot be convered to an int. 
+
+    Additional Documentation
+
+
+        Variable Documentation
+        https://docs.oracle.com/javase/specs/jls/se8/html/jls-4.html
+
+        Type Conversion Documentation
+        https://docs.oracle.com/javase/specs/jls/se8/html/jls-5.html
+
+
+Fixed Array
+
+    Creating Arrays
+
+        Arrays are used to hold more than a single integer or string at a time, a traditional array type in Java is a fixed-size sequential collection of elements of the same type with a zero-based index. In english, an array is a grouping of data/information that starts at the begining of an array so 0 to the end of the array, which is predetermined upon initlizing it. the array works through its self sequentally. the Zero-based index means that accessing and seetting element is done by an integer where 0 represents the first item, 1 the second etc, to use an array we must firs declare it, then initalize it and then add elements or values to it, it can be done seperately or together. 
+
+            int[] myArray;
+            myArray = new int[5];
+            myArray[0] = 4;
+            myArray[1] = 8;
+            myArray[2] = 8;
+            myArray[3] = 5;
+            myArray[4] = 9;
+
+        So the array is delared as an int type in int[] as well as named, when you initalize the array, myArray = new int[5] you declare the size of the array, and it will have default values, for int type it will be all 0's, then yo umus tdeclare the values of the array as seen in the myArray[0] = 4; etc, orrr you can declare initalize and hardcode the values all at the same time
+
+            int[] myArray = {4, 8, 8, 5, 9}; 
+
+        though when declaring the values of an array in this manner it must be done within {} or else it will not work. 
+
+
+    Fixed Arrays mean fixed size
+
+        There is not changing the size of a fixed array, meaning theres not push or pop in them, in both of thease examples the length of the array is determined by the number of elements it has. the built-in array type has a fixed size after it is initalized, meaning that it cannot be added to or subtracted from. You can reassign the values of an array but you cannot change the size of it. 
+
+
+    Manipulating Fixed Arrays
+
+        We can change the values in the array similar to how we did in python. by creating new variables and creating new assingments for the values of the variables that relate to a specifif value in the array
+
+            String[] fruits = {"banana", "pear", "papaya", "kiwi"};
+            // To swap the value at index 0 and index 3
+            String temp = fruits[0]; // assigns temp to "banana"
+            fruits[0] = fruits[3]; // { "kiwi", "pear", "papaya", "kiwi"}
+            fruits[3] = temp; // { "kiwi", "pear", "papaya", "banana"}
+
+        In the above example what we did was create a new variable called temp, and assigned it to the array value 0, which assigns temp to bannana, 
+        after that we changed the value of fruit at 0 to fruit at 3, then we inserted our new value of temp, into value 3 of the array, which is a bit of around about way to do it, but if we simply moved the values arround it would create a loop and not be very helpful. 
+
+
+        We can also get the length of arrays with the .length function, we need the name of the array and then to apply .length to it we can also use the .length to find the spesific value of a location in the array. 
+
+            System.out.println(fruits.length);
+                this would give us the length of the array fruits, which is 4
+
+            System.out.println(fruits[fruits.length - 1]); would give us the name of the value at the end of the array which is banana.
+
+
+ArrayLists (Dynamic Arrays)
+
+    The ArrayList Type 
+
+        The ArrayList type is more like the arrays im used to. the basic fixed array type is very space and time effet however it isliimited, not only by its fixed size but also in what i can do with it. to use the ArrayList type we will need to import it from the java utilities library. import java.util.ArrayList;. There are some slight changes in how we interact with an ArrayList but it is still an array. it isnt fixed in size and we can add as many items as we need to. 
+
+            Creating an ArrayList
+
+                import java.util.ArrayList;
+
+                ArrayList<Integer> myArray = new ArrayList<Integer>();
+
+            we must declare the type. ArrayList as well as what it is, <Integer> then name if myArray, then we must instance it, usuing the new keyword
+            new ArrayList<Integer>(); and when we instance it we need to use the (); because we are calling upon a function. 
+
+    
+    Generics <T>
+
+        In the same way we declare which type a variable can hold, we need to declare the type that an ArrayList can hold as well. this is because it will need to have an idea of how much space it needs to alocate for the ArrayList
+
+        Generics help us to keep the compiler and use from making mistakes that would cause issues during run time. we will ues a generic <t> in the future when defining our own classes and types, in the same way the ArrayList class uses them. By indacating a placeholder for a type to give other programmers the option to use their own specififed type in conjunction with my class. but for now we will just be usuing them to indacate the data type an array list will hold.
+
+    Object Only 
+
+        One potential draw back of ArrayList is that they can only hold object types or refrences to objects, so we will need to use the wrapper classes such as Integer, Double or String, 
+
+    Manipulating ArrayLists 
+
+        For manipulating data inside of the ArrayList we do not use bracket notation like python. instead we use what are called getters and setters, which is  form of .notation functionality. 
+
+            if we were to add the number 10 & 11 to our array we made previously it would look like this
+
+                myArray.add(10);
+                myArray.add(11);
+
+            To then get the values from the array we use the .get() function passing in the index of the array we wish to access 
+
+                Integer num = myArray.get(0);
+
+            this will produce the number 10 if we were to print num
+
+            now lets say we want to overwrite the values that are already present in the array. this is where the .set() function comes in. inorder to do this correctly. we need to access the array and use the .set function as follows
+
+                myArray.set(0, 9);
+
+            in the .set() function we have the index of the array we wish to access 0 and what we wish to set it as, 9 both are required inorder for the function to work properly
+
+
+    Object Array types
+
+        We can add various element types if we set the ArrayList type to Object, as follows ArrayList<Object>, this allows us to slap pretty much any instance of object into it. including ints strings, doubles, and other arrays. we do not have to set the type that we are adding when we ues the .add function, it will automaticly cast the type object to its correct form. 
+
+    
+    The most common methods for the ArrayList are add, clear, clone, contains, get, indexOf, isEmpty, remove, and size. and the <> are refered to as diamonds. 

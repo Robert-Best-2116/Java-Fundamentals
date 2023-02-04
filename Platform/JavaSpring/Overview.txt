@@ -1,0 +1,57 @@
+Overview
+
+    Spring boot alows to build full applications that will follow the MVC paradigm that we used previously, before we get into spring boot its important to discern the differences between spring, spring MVC and spring boot, The spring framework is a large opensourced framework that consists of several modules. one of them is the spring MVC framework, which allows us to build web application susuing java, we will leave it at that but heres a simple list of what well cover in the course
+
+        Inversion of Control Componet
+        Aspect orented programming framework
+        Data access framework
+        transaction management framework
+        MVC framework
+        Remove Access framework
+        Batch framework
+        Intergration framework
+
+    Spring boot is a framework used to fonfigure and set up spring applications easily. Usually a spring project needs several dependencies installed and configured to work, but with spring boot everything comes preconfigured so that developers only have to worry about writing code and not XML (whatever that is) Spring boot is a configuration framework that usues the Spring framework for webapplications our primary spring module will be spring MVC framework. 
+
+    Accrost the web you will commonly see spring boot and spring MBC used interchangeably this is due to the popularity of the spring boot framework and the ight coupling it has with spring MVC when used for web appicatins, if we are confuring heavily, it its wise to check to see if we are on spring boot or spring MVC documenetation 
+
+    
+
+    Revisiting the Request-Response Cycle
+
+        Simply put the internet is a large network of computers that are connected and can communicate with each other. The web is made up of computers that well call clients and servers, 
+        
+            Client are the computers and other internet-connected devies that use the internet
+
+            Servers are ocmputers that store web pages or applications, they are computers just like the machine im on right now, but typically without a keywboard, mouse or screen. 
+
+        When a client wants to access a web page, a copy of the web page is downlaoded from the se rver onto the client machine to be displayed in the users web browser, in other words the client makes a request and the server answers back with a response 
+
+
+    Request
+
+        As clients we make requests by 
+
+            Typing a url in the address bar and hitting enter, 
+            
+            Clicking on a link 
+
+            Submiting a form
+
+            Refreshing a page 
+
+
+    Responces 
+
+        The erver we are trying to reach then responds with some kind of content, maybe its a search result, a friends profile, or video content, in all of thease cases this content is provided by the client as some combonation of HTML, CSS and JavaScript 
+
+
+    Spring Flow 
+
+        Like most web frameworks springs web module functions on a request basis, this means that each request will have a lifecycle within our framework where our models views and controllers will have to work together to esnd an appropreate responce to the client, the following picture represents the HTTP request and repsponce cycle in spring mvc, by the end of the course i will learn how all of thease componets work together to serve responces correctly. 
+
+
+
+    Spring MVC features, there are many parts working concurrently in spring mvc this adds complexity in building our application but also gives developers many benefits, one major one is the concept of speration of concerns, MVC prives its self on having a clear seperation of roles for each letter in MVC each role will be its own specialized object, and we will use dependecy injection to have them work together. 
+
+        

@@ -1,0 +1,29 @@
+
+
+HelloWorld 
+
+    When editing a server we will need to restart/refresh it inorder for our changes to take effect, theres three buttons at the top left that are important, green arrow, starts the server, red box stops the server, redbox with green arrow, restarts the server, you can also force stop the server by rightclicking the console and selecting terminate/disconnect all, and itll put an end to it.
+
+    In STS the folder strucutre of our application is broken down into smaller parts in the package explorer, 
+
+    we will need to import the @RestControler and @RequestMapping() the request mapping will need the route location inside of its () ex @RequestMapping("/")
+    once were inside of the RequestMapping we will need to create a method (itll need to be public) to return the String Hello World 
+
+
+
+@RestController and Annotations 
+
+    Annotations
+
+        In Java annotations are a form of metadata that can be added to your source code. There are annotations for classes, methods, variables, parameters and packages, . Annotations are not spring boot specific but part of the java programming language, in the code above we used two annotations lets go over them 
+
+            1. @RestController this Annotation allows our controller to respond with data, strings json etc 
+
+            2. @RequestMapping this Annotation alsows for mapping web requets onto specific handler classes (on the class level) and/or handler methods (on the method level). currently in our code we are usuing a method level annotation, meaning that the public string home() method will handle any request that comes from the / path, we can also annotate the whole class so that all methods respond to a certain path. so the "/test" route will respond with hello world, and the "test/world" route will wrespond with the more stuff, 
+
+
+Routing 
+
+    Every request will be organized based on two parts: the path and dthe request method. the request method is easy to identify it is get unless you have specified it otherwise such as a post requesti in a form, the path is the easiest to identify by the / and the words following it. 
+
+    

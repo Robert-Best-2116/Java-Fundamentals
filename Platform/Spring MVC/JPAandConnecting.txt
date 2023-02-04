@@ -1,0 +1,50 @@
+
+
+JPA! Not a Beer! 
+
+
+    We need to learn how to persist data, in short, how to store data in a databse, to do thise we will be making use of the Java PErsistance API or JPA to start, we need a new spring boot project,
+
+    Spring Data JPA 
+
+        The spring data projects mission is to provide a familiar and consistent spring based programming model for data access while strill retaning the special trats of the underlying data store, to do this there is a module called spring data JPA this module is built to use the JPA as the persistence driver, of course since JPA is jus ta specification and not an implemetnation, we will need something to actually implement the JPA 
+
+
+    Dependencys and Setup
+
+        We will be usuing MYSQL as our data base with JPA so we will only need to add the two depencies for JPA and MySQL the spring boot starter data jpa actually inludes af ew other dependeices including hibernate? so I will only need thease two, 
+
+        I added them to my project in the new project set up, because it seemed simplest, so added 
+
+            MySQL Driver, as well as Spring Data JPA 
+
+        You can also add them in the POM.XML depdencies tab or manually put them in the POM.XML 
+
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <scope>runtime</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-data-jpa</artifactId>
+            </dependency>
+
+
+
+Connecting To MySQL 
+
+    First youl need to set up your application.properties page with the following information 
+
+        spring.datasource.url=jdbc:mysql://localhost:3306/<<YOUR_SCHEMA>>
+        spring.datasource.username=root
+        spring.datasource.password=root
+        spring.jpa.hibernate.ddl-auto=update
+
+
+    the name and password have been updated to reflect my actuall ones, and the schema name will need to be changed to match the schema we created in MySQL 
+    The Schema must be created prior to updating this or we will get errors 
+
+
+
+

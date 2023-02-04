@@ -1,0 +1,145 @@
+
+
+Interfaces 
+
+    Interfaces arise out of the need for several objects to be able to interact with someting in the same way. You may think that this is what a class is for, but imagine that we have both a cat and a dog, they will be seperate classes, but their will be some shared functionality. they would also need to implement the code they share diffrently, as they will not be doing the same things. we cant create new classes for both, and we should not create create a class for both of them to inherit from just because they will share method signatures, but not functionality
+
+    in this instance we will create an interface for each class to implment, this means that the HousePet interface declares there should be the methods, giveOwnerAffection() and sleepInside() then anything conforming to that interface will have those methods. this also means that if anything in the future wants to become a house pet, we just implement that in a class to make sure that it conforms to the contract, declare it to implement housepet and it will be used where any housepet is useable. 
+
+
+Interface Implementation 
+
+    Interfaces are not Classes 
+
+        You can think of an interface as a list of specifications that a class agrees to follow, to reiterate, an interface is not a class, while writing an interface is similar to writing a class ,they are two diffrent constructs. a Class describes the attrbutes and behaviors of an object. an interface states behaviors that a class must implement. In its most common form, an interface is a group of related methods with empty bodies, consider a home managment app, an internet of things system that keeps track of the status of many electrical applications in a home. an eletronic defice might implement an interface ACPowerable. 
+
+            public interface ACPowerable {
+                Integer voltage =120;
+                Integer frequency = 60;
+
+                abstract void unPlug();
+                abstract boolean checkPluggedIn();
+
+                public default void hasPower() {
+                    String message = "The device is ";
+                    if(!checkPluggedIn()) {
+                        message += "not";
+                    }
+                    System.out.println(message + "plugged in.");
+                }
+            }
+
+    Interface Methods
+
+        There are three types of interface methods: Default, Static, And Abstract.
+
+            1. Default methods allow developers to create default methods that do not need Implementation
+
+            2. Static methods are interface member methods, They are implemented on the interface level and are called on the interface not the class. Therefor yo ucannot override interfae methods, you can only call them directley on the interface that they were declared 
+
+            3. Abstract methods are methods that are declared without implementaiotn, we saw an example of that in the examples above. 
+
+        Default methods are declared with default, and static with the static keyword, abstract methods re implicit, and you do not include a method type. below are all implicit delcerations 
+
+            Abstract- is the implicit method type, without decleration of either static or default, the method will be Abstract 
+
+            Public is the implicit access modifier. 
+
+        An interface can contain constant declerations as well, All constant values defined i nan interface are implicity public static and final. therefore you are free to omit hease modifers. 
+
+
+    Implementing An Interface 
+
+        To implemnt any interface we must use the keywrod implements in our class definitions. however there is one ruel. a Class that implements an interface must implment all methods that were defined in the interface definition besides default and static. 
+
+            public class Heater extends ElectricalAppliance implements ACPowerable {
+                
+                public Integer fanSpeedPercent = 0;
+                public Integer heatSettingPercent = 0;
+                public Boolean isPluggedIn = false;
+                public Integer maxWattage;
+                
+                public Heater(Integer maxWattage) {
+                    this.maxWattage = maxWattage;
+                }
+                
+                public void applySettings(Integer fanSpeedPercent, Integer heatSettingPercent) {
+                    this.fanSpeedPercent = fanSpeedPercent;
+                    this.heatSettingPercent = heatSettingPercent;
+                }
+                
+                public void plugIn() {
+                    isPluggedIn = true;
+                }
+                
+                public void unPlug() {
+                    isPluggedIn = false;
+                }
+                
+                public boolean checkPluggedIn() {
+                    return isPluggedIn;
+                }
+                
+                public void checkPowerConsumption() {
+                    if(isPluggedIn) {
+                        Double power = 0.0;
+                        // assuming both fan and heater contribute evenly to power consumption
+                        power += maxWattage * 0.5 * fanSpeedPercent * 0.01;
+                        power += maxWattage * 0.5 * heatSettingPercent * 0.01;
+                        System.out.println("The heater is consuming " + power + " Watts!");
+                    } else {
+                        System.out.println("The heater isn't plugged in!");
+                    }
+                }
+            }
+
+
+    Interfaces VS Classes!
+
+        An interface is similar to a class in the following ways,
+
+            An interface can vonain any number of methods. 
+            An interface is written in a file with a .java extention with the name of the interface matching the name of the file.
+            the bytecode of an interface appears in a .class file 
+            Interfaces appear in packages and their corresponding bytecode file must be in a directory structure that matches the package name 
+
+        However an interface is diffrent from a class in several ways, 
+
+            You cannot instantiate an interfacean interface does not contain any constructors
+            The only fields that can appear in an interface must be both static and final ,that is constants that cannot change
+            An interface is not extended by a class, it is implemented by a class. 
+            An interface can extend multiple interfaces, a class can only extend from one class but it can implement multiple interfaces. 
+
+
+
+Annotations
+
+    In Java SE 5, annotations were intoduces to help developers make certain notes about the code. Of course we already had a way to do that. comments but thease notes are not just for humans to read but for the compliler and build tools 
+
+    Annotation Usage 
+
+        To understand why we want annotations, lets imagine that we are trying to override this getName() method for some reason 
+
+            class Human {
+                private String name; 
+                public string getName(){
+                    return name;
+                }
+                public void setName(String n){
+                    name = n;
+                }
+            }
+
+            public class Developer extends Human {
+                public String getName(){
+                    return "Developer!";
+                }
+            }
+
+
+        There might be an error here but i cant see it, so who knows their implying there is 
+
+        What if we could tell our complier that we want to make sure we are actually overiding a method, we just add the @Override annotation: and force it too 
+
+            
+

@@ -1,0 +1,114 @@
+
+
+Limitations of the Request/Responce Cycle
+
+    Each request in the HTTP Request Responce cycle begins with the browser sending a request, then the server runs some methods and the cycle ends with the browser rendring a responce from the server. 
+
+
+    Statelessness: Each Request is a Seperate Event 
+    
+        The Cycle is event driven, it is what is refered to as statelessness. that means that each request happens independely and dosent "remember" anything that happend prior. As each request does not inherently retain data from prior requests. 
+
+        However, there are many reasons to keep information between requests. A typical user pattern for shopping online for instance, involves retaining information between each one of the seperate requests. 
+
+
+    Peristent Data Storage Usuing Session
+
+        Session is a method of data persistence that is typically used for tempoary storage, in contrast to a database. a client makes a request and the server may need to keep track of some temporary or conversational data, like which items are currently in the shopping cart, this is how session works in a very basic level
+
+            Session ID: The data is given a unique ID called session ID that will allow the session data to be manipulated as key-value pairs
+
+            Client-Side Storage: The seession id is most commonly written to a text file called a Cookie and stored inthe users browser. 
+
+            Later Requests: When a user makes subsequent requets, the browser will submit the cookie with their unique session ID 
+
+            Communication with the Server: The server is then able to track user interaction and store temporary dat with about the user. 
+
+    
+    User Specific Results 
+
+        Where the actual data is stored depends on the language and framework, the default for Java is memory on the server, though it is common accross all langauges to use a data store, such as redis or mongo to store session data 
+
+
+    Comparing/Contrasting Types of Data Persistence
+
+        Detereming what data to store and where/how to store it is subject to many consideration. System architecture, data senitivity, data lifecycle, scope, just to name a few, Knowing more about your meta-data that is, The data about your data, as well as the diffrences between the common types of persistent storage is critical to architeching the optimal solution for your requirments, 
+
+        Persistent Stroage Type,        Lifespan                            Common Example 
+
+        Database                        Permanent Until manually deleted    Encripted passwords, Encripted Credit card info 
+
+        Cookies                         Set per browser settings            User selected language 
+
+
+
+Session 
+
+    Usuing Session 
+
+        To use session, just like we did with Model model, for sending data to the view, we will use dependency injection, Again just like with the Model model if you want to use session in any of your mapped handeler methods, just include a parameter of the type HttpSession in the method signature 
+
+            import javax.serlet.jttp.HttpSession;
+            @Controller
+            public class MainController {
+                public String index(HttpSession session){
+                    variable to store session here.
+                    return "index.jsp
+                }
+            }
+
+        This is all you need to do to get access to the session, if it did not exist before then the servlet will automatically create one for you, including setting hte client cookie and setting aside space for the session data 
+
+    
+    Setting Session Attributes
+
+        How do we use session? If you want any information to persist accrost request, you can stash it in session by assiging a key-value pair usuing setAttribute, and then retrive that value later passing the same key to the getAttribute method, for example, if you want to count how many times someone has visited your site, you could initalize that count like so 
+
+            public String index(HttpSession session) {
+                session.setAttribute("count", 0);
+                    return "index.jsp";
+            }
+
+
+    Getting Session Attributes 
+
+        We can retrive said count usuing getAttribute if we want to be able to show it on the page 
+
+            public String showCount(HttpSession session, Model model) {
+                Integer currentCount = (Integer) session.getAttribute("count");
+                model.addAttribute("countToShow", currentCount);
+                return "showCount.jsp"
+            }
+
+        Note that we need to cast the information from the session object back into an Integer The reason is that once we safe some data in the session, the session gets turned into the object data type 
+
+
+    Updating Session Attributes
+
+        To update the count, you you can also use setAttribute in the same way, if an attribute with that key does not exzist it will create one converseley if an attribute with that name already exists it will update it. 
+
+            public String index(HttpSession session) {
+                session.setAttribute("count", 0);
+                    return "index.jsp";
+            }
+
+        Their is one problem with this, beings that all websites are event driven, once the user visits the page once,it runs that index method, sets the count in session to zero and renders the page, which is great, but the next time a user goes to the same page, since our server is stateless it runs the index method again, resetting the count to zero, so this is how we increment the count 
+
+        The first thing we will need to do is test ifa key is already in session, to do this you can use the getAttribute featuer, if it is not already there it will return null, which is handy, else it will incremet it. 
+
+            public String index(HttpSession session) {
+                if (session.getAttribute("count") == null) {
+                    session.setAttribute("count", 0);
+                }
+                else {
+                    Note i will need to get the session attribute count usuing the above method for getting session attributes, then cast it to an int, and thennn  incremnt it, by one 
+                }
+            }
+
+
+        You can set several diffrent attributes on the same session object, as well sa invaladate it entirely
+        
+
+    Session Documentation
+
+         https://docs.oracle.com/javaee/7/api/javax/servlet/http/HttpSession.html

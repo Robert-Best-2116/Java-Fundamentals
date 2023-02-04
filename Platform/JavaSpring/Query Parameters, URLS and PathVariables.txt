@@ -1,0 +1,44 @@
+
+
+Query Parameters 
+
+    If you make a request to any search platform from your browser youl see that they will be able to ues that data and fill in your search bar, youve just used query parameters to send a server information. everything after the ? will be sent to the server as a query parameter key value pairs, note everything after the ? is called the query string, or the url parameters, in this case if you sent "Q" the key would be Q and the value would be query parameters, to implement query parameters all we need to do is use the @RequestParam annotation in our methods, we could include the parameter "searchQuery as a type string(request paramaters must always be of the String type,) and annotate it as the URL query field of q (for question)
+
+        Query code ex 
+
+            import org.springframework.web.bind.annotation.RequestMapping;
+            import org.springframework.web.bind.annotation.RequestParam;
+            import org.springframework.web.bind.annotation.RestController;
+            @RestController
+            public class HomeController {
+                @RequestMapping("/")
+                public String index(@RequestParam(value="q") String searchQuery) {
+                    return "You searched for: " + searchQuery;
+                }
+            }
+
+    While the above code will work, if you try to access the / without a query parameter the application will crash, this is due to another argument for the @RequestParam annotation being required, which defaults to true, if we want to allow our users to submit we can set required=false in our annotaiton call 
+
+        Query code fixed ex
+
+            @RequestMapping("/")
+            public String index(@RequestParam(value="q", required=false) String searchQuery) {
+                return "You searched for: " + searchQuery;
+            }
+
+
+
+Path Variables 
+
+    One of the other primary ways for you to transmit information to the server is by the URL parameters, consider this route http://login.codingdojo.com/m/59/5436/33349 each path variable plays a role to find the exact resour that needs to be displayed to the client, with spring toot we are able to implement something very simlar easily, we use the @PathVariable annotation 
+
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+@RestController
+public class HomeController {
+    @RequestMapping("/m/{track}/{module}/{lesson}")
+    public String showLesson(@PathVariable("track") String track, @PathVariable("module") String module, @PathVariable("lesson") String lesson){
+    	return "Track: " + track + ", Module: " + module + ", Lesson: " + lesson;
+    }
+}
